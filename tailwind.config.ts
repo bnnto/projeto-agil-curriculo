@@ -10,8 +10,8 @@ export default {
         "primary-hover": "#520F1D",
         secondary: "#C89D3C", // Dourado
         canvas: "#F8F9FA",
-        success: "#059669",
-        warning: "#D97706",
+        success: "#047857", // esmeralda escuro — AA com branco (auditoria S0-4)
+        warning: "#B45309", // âmbar escuro — AA com branco (auditoria S0-4)
         danger: "#DC2626",
       },
       fontFamily: {
