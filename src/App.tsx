@@ -1,6 +1,7 @@
 import { AuthPage } from "./components/auth/AuthPage";
 import { SignOutButton } from "./components/auth/SignOutButton";
 import { useAuthState } from "./components/auth/authContext";
+import { StudentHomePage } from "./components/student/StudentHomePage";
 import { ROLE_LABELS } from "./lib/roles";
 
 /**
@@ -48,22 +49,20 @@ function AuthGate() {
           <SignOutButton />
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        <section
-          aria-labelledby="painel-title"
-          className="rounded-lg border border-slate-200 bg-white p-6 shadow-level1"
-        >
-          <h1
-            id="painel-title"
-            className="font-serif text-2xl font-bold text-primary"
-          >
-            Bem-vindo(a), {user.name}
-          </h1>
-          <p className="mt-2 text-sm text-slate-600">
-            Autenticação com papéis operando (Sprint 1, issue [S1-1]). Os
-            módulos deste papel chegam nas próximas issues da sprint.
-          </p>
-        </section>
+      <main>
+        {role === "aluno" ? (
+          <StudentHomePage />
+        ) : (
+          <section className="mx-auto max-w-6xl rounded-lg border border-slate-200 bg-white p-6 shadow-level1">
+            <h1 className="font-serif text-2xl font-bold text-primary">
+              Bem-vindo(a), {user.name}
+            </h1>
+            <p className="mt-2 text-sm text-slate-600">
+              Painel do papel “{role !== null ? ROLE_LABELS[role] : "—"}” chega
+              nas próximas issues da Sprint 1 (SPRINTS.md §S1-4..S1-5 e S3+).
+            </p>
+          </section>
+        )}
       </main>
     </div>
   );
