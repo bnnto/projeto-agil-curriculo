@@ -1,9 +1,14 @@
-import { useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { RoleSelect } from "./RoleSelect";
 import { ROLES, ROLE_LABELS, type Role } from "../../lib/roles";
+import {
+  CONSENT_TERM,
+  CONSENT_TERM_VERSION,
+  consentSummary,
+} from "../../lib/consentTerm";
 
 /**
  * Página de autenticação (issue [S1-1]): entrada única com abas Entrar/Criar
@@ -20,6 +25,8 @@ export function AuthPage() {
   const [role, setRole] = useState<Role>("aluno");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [consentAccepted, setConsentAccepted] = useState(false);
+  const consentErrorId = useId();
 
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
@@ -34,12 +41,15 @@ export function AuthPage() {
     }
     try {
       if (mode === "signUp") {
+        // R7 (issue [S1-2]): a versão do termo aceito vai ao servidor,
+        // que valida contra a versão vigente antes de criar a conta.
         await signIn("credentials-email", {
           email,
           password,
           name,
           role,
           flow: "signUp",
+          consentTermVersion: CONSENT_TERM_VERSION,
         });
       } else {
         await signIn("credentials-email", { email, password, flow: "signIn" });
@@ -116,6 +126,11 @@ export function AuthPage() {
                   onChange={setRole}
                   required
                 />
+                <ConsentCheckbox
+                  checked={consentAccepted}
+                  onChange={setConsentAccepted}
+                  errorId={consentErrorId}
+                />
               </>
             ) : null}
 
@@ -140,15 +155,16 @@ export function AuthPage() {
               error={error ?? undefined}
             />
 
-            {mode === "signUp" ? (
-              <p className="text-xs leading-relaxed text-slate-500">
-                Ao criar sua conta você concorda com o tratamento dos seus dados
-                pessoais conforme a LGPD. O termo de consentimento detalhado
-                será apresentado no próximo passo (issue [S1-2]).
-              </p>
-            ) : null}
-
-            <Button type="submit" variant="primary" disabled={pending}>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={pending || (mode === "signUp" && !consentAccepted)}
+              aria-describedby={
+                mode === "signUp" && !consentAccepted
+                  ? consentErrorId
+                  : undefined
+              }
+            >
               {pending
                 ? "Processando…"
                 : mode === "signIn"
@@ -159,10 +175,58 @@ export function AuthPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-slate-400">
-          {" "}
           {ROLES.map((r) => ROLE_LABELS[r]).join(" · ")}
         </p>
       </div>
+    </div>
+  );
+}
+
+type ConsentCheckboxProps = {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  errorId: string;
+};
+
+/**
+ * Checkbox obrigatória de aceite do termo LGPD (issue [S1-2], R7).
+ * Bloqueia o submit até o aceite e dá acesso ao texto integral do termo
+ * vigente em <details> acessível (sem dependências externas).
+ */
+function ConsentCheckbox({ checked, onChange, errorId }: ConsentCheckboxProps) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="flex cursor-pointer items-start gap-2 text-sm text-slate-700">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          required
+          className="mt-0.5 accent-primary"
+          aria-required="true"
+        />
+        <span>
+          Li e aceito o Termo de Consentimento LGPD ({CONSENT_TERM_VERSION}) —{" "}
+          <span className="text-slate-500">{consentSummary()}</span>
+        </span>
+      </label>
+      <details className="rounded border border-slate-200 bg-canvas px-3 py-2">
+        <summary className="cursor-pointer text-xs font-semibold text-primary">
+          Ler o termo completo
+        </summary>
+        <pre className="mt-2 max-h-56 overflow-y-auto whitespace-pre-wrap font-sans text-xs leading-relaxed text-slate-600">
+          {CONSENT_TERM}
+        </pre>
+      </details>
+      {!checked ? (
+        <p
+          id={errorId}
+          role="alert"
+          className="text-xs font-medium text-danger"
+        >
+          O aceite do termo é obrigatório para criar a conta.
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { api, internal } from "./_generated/api.js";
 import { hashPassword, verifyPassword } from "./password"; // runtime padrão (Web Crypto)
 import { isValidEmail, normalizeEmail } from "../src/lib/auth";
 import { isRole } from "../src/lib/roles";
+import { CURRENT_TERM_VERSION } from "./consentTerms";
 
 type AuthorizeCtx = GenericActionCtxWithAuthConfig<DataModel>;
 
@@ -14,6 +15,8 @@ interface Credentials {
   name?: string;
   role?: string;
   flow?: "signUp" | "signIn";
+  /** R7 (issue [S1-2]): versão do termo aceita no cadastro. */
+  consentTermVersion?: string;
 }
 
 function parseCredentials(raw: unknown): Credentials | null {
@@ -28,6 +31,10 @@ function parseCredentials(raw: unknown): Credentials | null {
     name: typeof c.name === "string" ? c.name : undefined,
     role: typeof c.role === "string" ? c.role : undefined,
     flow: c.flow === "signUp" ? "signUp" : "signIn",
+    consentTermVersion:
+      typeof c.consentTermVersion === "string"
+        ? c.consentTermVersion
+        : undefined,
   };
 }
 
@@ -61,11 +68,22 @@ export const authorizeConfig = {
     if (flow === "signUp") {
       const name = credentials.name?.trim() ?? "";
       const role = credentials.role;
+      const consentTermVersion = credentials.consentTermVersion;
       if (name.length < 3) {
         throw new Error("Informe seu nome completo.");
       }
       if (!isRole(role)) {
         throw new Error("Selecione um papel válido.");
+      }
+      // R7 (issue [S1-2]): cadastro sem aceite do termo vigente é bloqueado
+      // no servidor — a checkbox da UI é reforço, não a regra.
+      if (
+        consentTermVersion === undefined ||
+        consentTermVersion !== CURRENT_TERM_VERSION
+      ) {
+        throw new Error(
+          "É necessário aceitar o Termo de Consentimento LGPD vigente.",
+        );
       }
 
       const existing = await ctx.runQuery(api.authHelpers.lookupByEmail, {
@@ -80,6 +98,7 @@ export const authorizeConfig = {
         name,
         role,
         secret,
+        consentTermVersion,
       });
       return { userId };
     }
