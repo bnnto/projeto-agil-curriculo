@@ -81,6 +81,23 @@ export default defineSchema({
     ),
     /** R6 — autorização geral de contato (default ausente = false). */
     showContactToRecruiters: v.optional(v.boolean()),
+
+    /** [S1-5] — competências (chips, máx. 20) e idiomas com nível (máx. 8). */
+    skills: v.optional(v.array(v.string())),
+    languages: v.optional(
+      v.array(
+        v.object({
+          name: v.string(),
+          level: v.union(
+            v.literal("basico"),
+            v.literal("intermediario"),
+            v.literal("avancado"),
+            v.literal("fluente"),
+            v.literal("nativo"),
+          ),
+        }),
+      ),
+    ),
   })
     .index("by_user", ["userId"])
     .index("by_enrollment", ["enrollment"])

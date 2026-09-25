@@ -11,6 +11,18 @@ import {
   type Availability,
   type EnrollmentStatus,
 } from "../../lib/studentProfile";
+import {
+  addLanguage,
+  addSkill,
+  LANGUAGE_LEVELS,
+  MAX_LANGUAGES,
+  MAX_SKILLS,
+  removeLanguage,
+  removeSkill,
+  validateLanguages,
+  type LanguageEntry,
+  type LanguageLevel,
+} from "../../lib/skills";
 
 const STATUS_LABELS: Record<EnrollmentStatus, string> = {
   ativo: "Aluno ativo",
@@ -51,6 +63,14 @@ const EMPTY_FORM: FormState = {
   availability: "estagio",
 };
 
+const LEVEL_LABELS: Record<LanguageLevel, string> = {
+  basico: "Básico",
+  intermediario: "Intermediário",
+  avancado: "Avançado",
+  fluente: "Fluente",
+  nativo: "Nativo",
+};
+
 /**
  * Cadastro/perfil do aluno (issue [S1-3]): dados pessoais, curso,
  * semestre/ano, matrícula única e status de vínculo (R1).
@@ -69,6 +89,11 @@ export function StudentProfileForm() {
   const [notice, setNotice] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [skills, setSkills] = useState<string[]>([]);
+  const [languages, setLanguages] = useState<LanguageEntry[]>([]);
+  const [skillDraft, setSkillDraft] = useState("");
+  const [languageName, setLanguageName] = useState("");
+  const [languageLevel, setLanguageLevel] = useState<LanguageLevel>("basico");
 
   // Pré-preenche com o perfil existente (upsert idempotente).
   useEffect(() => {
@@ -86,6 +111,8 @@ export function StudentProfileForm() {
         portfolioUrl: profile.portfolioUrl ?? "",
         availability: profile.availability,
       });
+      setSkills(profile.skills ?? []);
+      setLanguages(profile.languages ?? []);
       setLoaded(true);
     }
   }, [profile, loaded]);
@@ -131,9 +158,20 @@ export function StudentProfileForm() {
       return;
     }
 
+    // [S1-5] — idiomas validados no cliente também (níveis/duplicatas/limite).
+    const languagesCheck = validateLanguages(languages);
+    if (!languagesCheck.ok) {
+      setErrors(languagesCheck.errors);
+      return;
+    }
+
     setPending(true);
     try {
-      const result = await upsert({ ...validation.normalized });
+      const result = await upsert({
+        ...validation.normalized,
+        skills,
+        languages,
+      });
       setNotice(
         result.created
           ? "Perfil criado com sucesso."
@@ -304,6 +342,130 @@ export function StudentProfileForm() {
           onChange={(e) => set("portfolioUrl", e.target.value)}
         />
       </div>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-semibold text-slate-700">
+          Competências{" "}
+          <span className="font-normal text-xs text-slate-500">
+            ({skills.length}/{MAX_SKILLS})
+          </span>
+        </legend>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={skillDraft}
+            onChange={(e) => setSkillDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                setSkills((s) => addSkill(s, skillDraft));
+                setSkillDraft("");
+              }
+            }}
+            placeholder="Ex.: React, SQL, Figma…"
+            className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+            aria-label="Nova competência"
+          />
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setSkills((s) => addSkill(s, skillDraft));
+              setSkillDraft("");
+            }}
+          >
+            Adicionar
+          </Button>
+        </div>
+        {skills.length > 0 ? (
+          <ul
+            className="flex flex-wrap gap-2"
+            aria-label="Competências cadastradas"
+          >
+            {skills.map((skill) => (
+              <li key={skill}>
+                <span className="inline-flex items-center gap-1 rounded-full border border-primary bg-[#FDF2F4] px-3 py-1 text-xs font-semibold text-primary">
+                  {skill}
+                  <button
+                    type="button"
+                    onClick={() => setSkills((s) => removeSkill(s, skill))}
+                    aria-label={`Remover competência ${skill}`}
+                    className="text-primary/70 hover:text-danger"
+                  >
+                    ×
+                  </button>
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-xs text-slate-400">Nenhuma competência ainda.</p>
+        )}
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-semibold text-slate-700">
+          Idiomas{" "}
+          <span className="font-normal text-xs text-slate-500">
+            ({languages.length}/{MAX_LANGUAGES})
+          </span>
+        </legend>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            type="text"
+            value={languageName}
+            onChange={(e) => setLanguageName(e.target.value)}
+            placeholder="Ex.: Inglês"
+            className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15 sm:max-w-48"
+            aria-label="Novo idioma"
+          />
+          <select
+            value={languageLevel}
+            onChange={(e) => setLanguageLevel(e.target.value as LanguageLevel)}
+            className="rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+            aria-label="Nível do idioma"
+          >
+            {LANGUAGE_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {LEVEL_LABELS[level]}
+              </option>
+            ))}
+          </select>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setLanguages((ls) =>
+                addLanguage(ls, { name: languageName, level: languageLevel }),
+              );
+              setLanguageName("");
+            }}
+          >
+            Adicionar
+          </Button>
+        </div>
+        {languages.length > 0 ? (
+          <ul className="flex flex-wrap gap-2" aria-label="Idiomas cadastrados">
+            {languages.map((lang) => (
+              <li key={lang.name}>
+                <span className="inline-flex items-center gap-1 rounded-full border border-secondary bg-white px-3 py-1 text-xs font-semibold text-slate-800">
+                  {lang.name} · {LEVEL_LABELS[lang.level]}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setLanguages((ls) => removeLanguage(ls, lang.name))
+                    }
+                    aria-label={`Remover idioma ${lang.name}`}
+                    className="text-slate-500 hover:text-danger"
+                  >
+                    ×
+                  </button>
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-xs text-slate-400">Nenhum idioma ainda.</p>
+        )}
+      </fieldset>
 
       <div className="flex items-center gap-3">
         <Button type="submit" variant="primary" disabled={pending}>

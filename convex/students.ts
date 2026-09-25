@@ -6,6 +6,11 @@ import {
   validateStudentProfile,
   type StudentProfileInput,
 } from "../src/lib/studentProfile";
+import {
+  validateLanguages,
+  addSkill,
+  type LanguageEntry,
+} from "../src/lib/skills";
 import { recruiterProjection } from "../src/lib/visibility";
 
 /**
@@ -88,6 +93,22 @@ export const upsertProfile = mutation({
       v.literal("meio_periodo"),
       v.literal("freelancer"),
     ),
+    /** [S1-5] — competências e idiomas (opcionais; validados no handler). */
+    skills: v.optional(v.array(v.string())),
+    languages: v.optional(
+      v.array(
+        v.object({
+          name: v.string(),
+          level: v.union(
+            v.literal("basico"),
+            v.literal("intermediario"),
+            v.literal("avancado"),
+            v.literal("fluente"),
+            v.literal("nativo"),
+          ),
+        }),
+      ),
+    ),
   },
   handler: async (
     ctx,
@@ -129,6 +150,18 @@ export const upsertProfile = mutation({
     }
     const profile = validation.normalized;
 
+    // [S1-5] — competências normalizadas via addSkill (dedupe/limite)
+    // e idiomas validados (níveis, duplicatas, limite).
+    let skills: string[] = [];
+    for (const raw of args.skills ?? []) {
+      skills = addSkill(skills, raw);
+    }
+    const languagesCheck = validateLanguages(args.languages ?? []);
+    if (!languagesCheck.ok) {
+      throw new Error(languagesCheck.errors.join(" "));
+    }
+    const languages: LanguageEntry[] = args.languages ?? [];
+
     // CA 2 — matrícula única: mesma matrícula em outro usuário bloqueia.
     const enrollmentOwner = await ctx.db
       .query("students")
@@ -158,6 +191,8 @@ export const upsertProfile = mutation({
         linkedinUrl: profile.linkedinUrl,
         portfolioUrl: profile.portfolioUrl,
         availability: profile.availability,
+        skills,
+        languages,
       });
       return { studentId: existing._id, created: false as const };
     }
@@ -174,6 +209,8 @@ export const upsertProfile = mutation({
       linkedinUrl: profile.linkedinUrl,
       portfolioUrl: profile.portfolioUrl,
       availability: profile.availability,
+      skills,
+      languages,
       // S1-4 — defaults seguros: privado até o aluno escolher expor-se.
       visibility: "somente_candidaturas",
       showContactToRecruiters: false,
