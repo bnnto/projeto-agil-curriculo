@@ -47,11 +47,12 @@ export default defineSchema({
   }).index("by_user", ["userId"]),
 
   /**
-   * Perfil do aluno/egresso (issue [S1-3], R1).
+   * Perfil do aluno/egresso (issues [S1-3]/[S1-4], R1/R2/R6).
    * Um perfil por usuário (índice by_user único na prática).
    * `enrollment` normalizado (só dígitos) para unicidade da matrícula;
-   * `status` alimenta a regra de vínculo (R1) nas buscas de talentos.
-   * Visibilidade e contato (R2/R6) chegam na [S1-4] com defaults seguros.
+   * `status` alimenta a regra de vínculo (R1) nas buscas de talentos;
+   * `visibility` (R2) e `showContactToRecruiters` (R6) — default PRIVADO:
+   * o aluno opta por se expor, nunca o contrário.
    */
   students: defineTable({
     userId: v.id("users"),
@@ -74,8 +75,15 @@ export default defineSchema({
       v.literal("meio_periodo"),
       v.literal("freelancer"),
     ),
+    /** R2 — "publico" (banco de talentos) | "somente_candidaturas". */
+    visibility: v.optional(
+      v.union(v.literal("publico"), v.literal("somente_candidaturas")),
+    ),
+    /** R6 — autorização geral de contato (default ausente = false). */
+    showContactToRecruiters: v.optional(v.boolean()),
   })
     .index("by_user", ["userId"])
     .index("by_enrollment", ["enrollment"])
-    .index("by_status_course", ["status", "course"]),
+    .index("by_status_course", ["status", "course"])
+    .index("by_visibility_status", ["visibility", "status"]),
 });

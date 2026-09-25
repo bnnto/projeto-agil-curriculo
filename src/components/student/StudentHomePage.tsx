@@ -1,5 +1,6 @@
 import { Card } from "../ui/card";
 import { StudentProfileForm } from "./StudentProfileForm";
+import { PrivacySettings } from "./PrivacySettings";
 
 /**
  * Home do aluno (issue [S1-3]): cadastro/edição do perfil em Card
@@ -24,6 +25,9 @@ export function StudentHomePage() {
       <Card title="Cadastro do aluno" accent="primary">
         <StudentProfileForm />
       </Card>
+      <div className="mt-6">
+        <PrivacySettings />
+      </div>
     </div>
   );
 }
