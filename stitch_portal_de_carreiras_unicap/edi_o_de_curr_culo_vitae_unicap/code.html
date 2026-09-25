@@ -1,0 +1,871 @@
+<!DOCTYPE html><html lang="pt-BR" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&amp;family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"tertiary-fixed":"#dbe1ff","on-surface":"#111c2d","surface-variant":"#d8e3fb","on-primary-fixed-variant":"#812535","on-tertiary-container":"#799bff","on-primary-fixed":"#40000f","surface-tint":"#a03d4b","on-surface-variant":"#554243","tertiary":"#001c57","inverse-on-surface":"#ecf1ff","on-error-container":"#93000a","tertiary-fixed-dim":"#b4c5ff","primary-container":"#6b1426","surface-container-lowest":"#ffffff","inverse-primary":"#ffb2b8","on-background":"#111c2d","surface-container":"#e7eeff","primary-fixed-dim":"#ffb2b8","secondary":"#795900","on-primary-container":"#f17c8a","tertiary-container":"#002f85","secondary-fixed":"#ffdea0","on-tertiary":"#ffffff","outline":"#887173","error":"#ba1a1a","outline-variant":"#dbc0c1","primary-fixed":"#ffdadb","on-error":"#ffffff","error-container":"#ffdad6","on-tertiary-fixed-variant":"#003ea8","surface-container-high":"#dee8ff","primary":"#4b0013","background":"#f9f9ff","on-primary":"#ffffff","surface":"#f9f9ff","secondary-fixed-dim":"#eec05b","on-secondary":"#ffffff","surface-bright":"#f9f9ff","on-tertiary-fixed":"#00174b","inverse-surface":"#263143","secondary-container":"#fece67","surface-container-low":"#f0f3ff","on-secondary-fixed":"#261a00","on-secondary-fixed-variant":"#5c4300","surface-container-highest":"#d8e3fb","surface-dim":"#cfdaf2","on-secondary-container":"#765600"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-2xs":"0.25rem","space-sm":"0.75rem","space-md":"1rem","layout-margin-desktop":"3rem","space-lg":"1.5rem","layout-margin-tablet":"2rem","layout-margin-mobile":"1rem","space-3xl":"4rem","space-xs":"0.5rem","layout-max-width":"1440px","space-xl":"2rem","space-2xl":"3rem","layout-gutter":"1.5rem"},"fontFamily":{"body-md":["Plus Jakarta Sans"],"display-lg":["Merriweather"],"display-lg-mobile":["Merriweather"],"body-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-lg":["Merriweather"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"]},"fontSize":{"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"display-lg":["40px",{"lineHeight":"52px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-lg-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"26px","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full max-w-[1440px] mx-auto px-layout-margin-desktop flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md"><img alt="UNICAP Carreiras Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VOSYHNTvv8cMqwj4wtxOEZ7EX17LLjuU_wlTwauyZiHn9ezt_ZC6EAtd656u9a60bEeQc6H0q6e3lXua6lLKeLoTPkBT12zTVcyQuQ1f9m3ceVfKEg62lmMcINcQUzeb9VvzdDF6VtdN2GrRwg1UgCyc24mSxsrgvlksUE_Kr_M3zL4AxcGEknWQzduBih1Y3flMqR3Z0iXEKKC1OHF5HlZNSPr_3Hnml_s1N0g73_1dPToiuyUsuVR2ey"></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-bold"><a class="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="dashboard-de-metricas" href="#">Dashboard de Métricas</a><a class="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="banco-de-talentos" href="#">Banco de Talentos</a><a class="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="pipeline-de-vagas" href="#">Pipeline de Vagas</a><a class="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="portal-do-aluno" href="#">Portal do Aluno</a><a class="px-space-md py-space-xs rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="meu-curriculo-vitae" href="#">Meu Currículo Vitae</a></nav><div class="flex items-center gap-space-md"><div class="relative flex items-center justify-center p-space-xs text-on-surface-variant hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-1 right-1 flex items-center justify-center w-4 h-4 bg-primary text-on-primary font-label-sm text-label-sm rounded-full">3</span></div><div class="hidden md:flex items-center gap-space-xs px-space-sm py-space-xs rounded-lg bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">verified</span><span class="">Pólo Recife - Matrícula Ativa</span></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="hidden sm:flex flex-col text-right"><span class="font-label-lg text-label-lg text-on-surface font-semibold leading-tight">Profa. Helena Drummond</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Coordenação de Estágios &amp; Carreiras</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpHZVt-z8WRZ_Gi5ukL8W2LIbKho_bkZ0KkmPFPHZisHSETDpTlB4ueIfkBBaRsn2uQzcPBG3gTPwbDQ0Fr6oQCHnKdQa4pFFDTh6nTCkM5vMapaKn0qiR7HUt1cq2I611GYj3mqw4xVPS8SSsEQsqH3zcu9MfOHTnylaotMOL5mPywHBvb-KzEj_fbVyTkoY4qgzEmj8ts-iO-TDAtzaw4ayAB37w0-UgTDDa3j7pAVk2VdRV2gl8WQ"></div></div></div></header><main class="w-full max-w-[1440px] mx-auto px-layout-margin-desktop pt-20 flex-1 bg-surface"><div class="flex flex-col w-full">
+<!-- Notification Toast Element (Hidden by default, used by scripts) -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-primary text-on-primary px-space-md py-space-sm rounded-lg shadow-xl" id="toastNotification">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-lg text-label-lg" id="toastMsg">Perfil acadêmico salvo com sucesso!</span>
+</div>
+<!-- BREADCRUMB & CONTEXTUAL HEADER -->
+<header class="w-full pb-space-lg">
+<nav aria-label="Navegação Estruturada" class="flex items-center gap-space-2xs text-on-surface-variant font-label-md text-label-md mb-space-xs">
+<a class="hover:text-primary transition-colors" href="#">UNICAP Carreiras</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Portal do Aluno</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Meu Currículo Vitae</span>
+</nav>
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-md pt-space-2xs">
+<div class="space-y-space-2xs max-w-3xl">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-space-xs py-0.5 rounded text-[10px] font-label-sm uppercase tracking-widest bg-primary-container text-on-primary font-bold">
+            Portal Discente
+          </span>
+
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">
+          Formulário de Currículo Vitae Acadêmico
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Mantenha seus dados acadêmicos, técnicos e projetos atualizados. Os perfis com preenchimento acima de 85% possuem prioridade no ranqueamento do algoritmo de matching com empresas conveniadas ao Porto Digital e ecossistema parceiro.
+        </p>
+</div>
+<!-- Action Group Header -->
+<div class="flex items-center flex-wrap gap-space-xs pt-space-xs xl:pt-0">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm hover:bg-surface-container transition-all" id="btnPreviewCv" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+<span class="">Pré-visualizar CV</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-secondary-container text-on-secondary-container font-label-lg text-label-lg shadow-sm hover:brightness-105 transition-all font-semibold" id="btnDownloadTop" type="button">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+<span class="">Baixar em PDF Oficial</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-lg py-space-xs rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary transition-all" id="btnSaveTop" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span class="">Salvar Alterações</span>
+</button>
+</div>
+</div>
+<!-- PROFILE COMPLETENESS BAR -->
+<div class="mt-space-lg p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md w-full md:w-auto">
+<div class="relative w-12 h-12 flex items-center justify-center shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="96, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-label-sm text-label-sm font-bold text-primary">96%</span>
+</div>
+
+</div>
+<div class="flex items-center gap-space-sm w-full md:w-auto justify-end">
+<div class="hidden lg:flex flex-col text-right">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Última Atualização</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Hoje às 09:42 (Recife)</span>
+</div>
+<span class="hidden lg:block w-px h-8 bg-surface-container-highest"></span>
+<div class="flex items-center gap-1.5 px-space-sm py-1.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary">workspace_premium</span>
+<span class="">Selo Aluno Destaque</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN 2-COLUMN WORKSPACE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start relative pb-space-3xl">
+<!-- LEFT COLUMN: SIDEBAR DE RESUMO & NAVEGAÇÃO RÁPIDA (Col 4) -->
+<aside class="lg:col-span-4 space-y-space-md lg:sticky lg:top-24">
+<!-- Student Profile Card -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-r from-primary-container via-primary to-primary-container"></div>
+<div class="relative pt-6 flex flex-col items-center text-center">
+<div class="relative">
+<img class="w-24 h-24 rounded-full object-cover shadow-md bg-surface-container-high" data-alt="Fotografia profissional em close de um estudante universitário de Ciência da Computação, homem jovem brasileiro pardo com expressão confiante e simpática, camisa social casual azul escura, iluminação de estúdio suave em tons quentes acadêmicos com fundo neutro desfocado." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgaGx9Br6DN6XxtfPKjC2LzHx82mvxK_0KLCx49_PtKzQIHUraYZGHplEpCyPs8m21RFmE1yjuHKoqoDaE8AMkby67zP4Fs42D_vYbaxB_Z3qUHNmsSmww-0w022Yc5EDCoLHb_3BryEvhzdhGtEw90Su-tf9mOMX4E2UNHSouI-wHrPN4AP-OO38-eg3-f1Z-0B0L6OeWiLnFQctJ1GKVlpbBDcheDQppEq6rH6DTtOp8e5SKrLpF3g">
+<span class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[12px] shadow-sm" title="Vínculo Ativo">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mt-space-sm">Gabriel Medeiros da Cunha</h2>
+<p class="font-label-lg text-label-lg text-primary font-semibold">Bacharelado em Ciência da Computação</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Escola Politécnica • 6º Semestre (Noite)</p>
+<div class="mt-space-sm flex items-center gap-space-2xs px-space-sm py-1 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="">Matrícula SIGA:</span>
+<span class="font-bold text-on-surface font-mono">202110482</span>
+</div>
+</div>
+<!-- SIGA Status Badge Strip -->
+<div class="mt-space-md pt-space-md bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">school</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Status Acadêmico</span>
+<span class="font-label-md text-label-md font-bold text-primary">Matrícula Regular Ativa</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-600 text-[20px]" title="Vínculo Institucional Autenticado">verified</span>
+</div>
+<!-- LGPD & Visibility Toggle (Regra de Negócio) -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-primary text-[20px]">visibility</span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">Banco de Talentos</span>
+</div>
+<!-- Custom Accessible Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="visibilityToggle" type="checkbox">
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant" id="visibilityStatusText">
+<strong class="text-primary font-semibold">Visível para Recrutadores:</strong> Seu currículo está ativo para triagens de empresas e convênios credenciados da UNICAP.
+          </p>
+</div>
+<!-- Key Metrics Quad -->
+<div class="mt-space-md grid grid-cols-2 gap-space-xs">
+<div class="p-space-sm rounded-lg bg-surface-container-low text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">CRA Atual</span>
+<p class="font-headline-lg text-headline-lg text-primary font-bold">8.70</p>
+<span class="text-[11px] text-emerald-700 font-medium">Top 5% da turma</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Candidaturas</span>
+<p class="font-headline-lg text-headline-lg text-on-surface font-bold">04</p>
+<span class="text-[11px] text-on-surface-variant font-medium">2 em entrevista</span>
+</div>
+</div>
+<div class="mt-space-xs p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">hub</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oportunidades Compatíveis</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">12 vagas com Match &gt; 80%</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]">arrow_forward</span>
+</div>
+</section>
+<!-- Quick Nav Anchor Index -->
+<nav aria-label="Índice de Seções" class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<h3 class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant mb-space-sm flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+<span class="">Navegação Rápida do CV</span>
+</h3>
+<ul class="space-y-1 text-label-md font-label-md">
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg hover:bg-surface-container-high text-on-surface transition-colors group" href="#bloco-pessoais">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="">1. Dados Pessoais &amp; Apresentação</span>
+</span>
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg hover:bg-surface-container-high text-on-surface transition-colors group" href="#bloco-academico">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="">2. Formação Institucional UNICAP</span>
+</span>
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg hover:bg-surface-container-high text-on-surface transition-colors group" href="#bloco-links">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="">3. Links &amp; Repositórios</span>
+</span>
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg hover:bg-surface-container-high text-on-surface transition-colors group" href="#bloco-competencias">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="">4. Competências (Skills)</span>
+</span>
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg hover:bg-surface-container-high text-on-surface transition-colors group" href="#bloco-idiomas">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="">5. Idiomas &amp; Proficiência</span>
+</span>
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg hover:bg-surface-container-high text-on-surface transition-colors group" href="#bloco-experiencias">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="">6. Experiências &amp; Extensão</span>
+</span>
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between px-space-sm py-space-xs rounded-lg bg-surface-container-high text-primary font-bold" href="#bloco-exportar">
+<span class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="">7. Exportação PDF Oficial</span>
+</span>
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Institutional Support Helper -->
+<div class="p-space-md rounded-xl bg-surface-container text-on-surface flex items-start gap-space-sm shadow-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">support_agent</span>
+<div class="space-y-1">
+<h4 class="font-label-lg text-label-lg font-bold">Plantão de Orientação Profissional</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Dúvidas sobre como descrever seus projetos acadêmicos? Agende uma revisão gratuita com os consultores da Coordenação de Carreiras.
+          </p>
+<a class="inline-block text-primary font-label-md text-label-md font-semibold hover:underline pt-1" href="#">Agendar mentoria →</a>
+</div>
+</div>
+</aside>
+<!-- RIGHT COLUMN: FORM STRUCTURE (Col 8) -->
+<main class="lg:col-span-8 space-y-space-xl">
+<!-- BLOCO 1: DADOS PESSOAIS & RESUMO -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md" id="bloco-pessoais">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">1. Dados Pessoais &amp; Apresentação Profissional</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Informações primárias de contato visíveis aos recrutadores homologados.</p>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-emerald-700 bg-emerald-50 px-2 py-1 rounded">100% Preenchido</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="fullName">
+              Nome Completo <span class="text-error">*</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="fullName" type="text" value="Gabriel Medeiros da Cunha">
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="academicEmail">
+              E-mail Institucional UNICAP <span class="text-error">*</span>
+</label>
+<div class="relative">
+<input class="w-full pl-space-sm pr-10 py-2.5 rounded bg-surface-container text-on-surface-variant font-body-md text-body-md cursor-not-allowed" id="academicEmail" readonly="" type="email" value="gabriel.cunha@unicap.br">
+<span class="absolute right-3 top-2.5 material-symbols-outlined text-emerald-700 text-[18px]">verified</span>
+</div>
+<span class="text-[11px] text-on-surface-variant">E-mail corporativo autenticado pela rede acadêmica.</span>
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="phoneNumber">
+              Telefone / WhatsApp <span class="text-error">*</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="phoneNumber" type="tel" value="(81) 98721-4490">
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="cityLocation">
+              Cidade e Bairro de Residência <span class="text-error">*</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="cityLocation" type="text" value="Recife, PE - Madalena">
+</div>
+</div>
+<div class="space-y-space-2xs pt-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="profileSummary">
+              Apresentação / Objetivo Profissional <span class="text-error">*</span>
+</label>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Recomendado: 250 a 600 caracteres</span>
+</div>
+<textarea class="w-full p-space-sm rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm leading-relaxed" id="profileSummary" rows="4">Estudante do 6º período de Ciência da Computação na Universidade Católica de Pernambuco com sólida base teórica e prática em Engenharia de Software, Modelagem Relacional e Bancos de Dados analíticos. Bolsista PIBIC com foco em mineração de dados educacionais. Busco oportunidade de estágio na área de Engenharia de Dados, Backend ou Business Intelligence, onde possa aplicar pipelines SQL, automação em Python e metodologias ágeis em desafios reais de mercado.</textarea>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Dica: Evite termos genéricos. Mencione suas tecnologias preferidas, projetos de maior destaque e disponibilidade de horário.
+          </p>
+</div>
+</section>
+<!-- BLOCO 2: FORMAÇÃO ACADÊMICA INSTITUCIONAL (INTEGRADO AO SIGA) -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md" id="bloco-academico">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">2. Formação Acadêmica Institucional UNICAP</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dados acadêmicos integrados com validação criptográfica direta do SIGA.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[24px]" title="Vínculo Verificado">verified_user</span>
+</div>
+<!-- SIGA Synced Notice Box -->
+<div class="bg-surface-container p-space-md rounded-lg flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">lock_clock</span>
+<div class="text-body-sm font-body-sm text-on-surface space-y-0.5">
+<p class="font-semibold text-primary">Campos institucionais auditados pela Secretaria Geral de Cursos</p>
+<p class="text-on-surface-variant">
+              Curso, semestre em curso, turno e CRA são sincronizados automaticamente a cada término de período letivo. Caso haja divergência no seu histórico, acesse o Portal SIGA Aluno para abertura de chamado.
+            </p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="md:col-span-2 space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Curso de Graduação</label>
+<div class="p-space-sm rounded bg-surface-container text-on-surface font-label-lg text-label-lg font-bold">
+              Bacharelado em Ciência da Computação
+            </div>
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Centro Acadêmico / Campus</label>
+<div class="p-space-sm rounded bg-surface-container text-on-surface font-label-md text-label-md">
+              UNICAP Icam Tech • Polo Príncipe
+            </div>
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Período / Semestre</label>
+<div class="p-space-sm rounded bg-surface-container text-on-surface font-label-md text-label-md font-semibold">
+              6º Semestre Letivo
+            </div>
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Previsão de Conclusão</label>
+<div class="p-space-sm rounded bg-surface-container text-on-surface font-label-md text-label-md font-semibold">
+              Dezembro de 2025 (2025.2)
+            </div>
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Coeficiente de Rendimento (CRA)</label>
+<div class="p-space-sm rounded bg-secondary-fixed text-on-secondary-fixed flex items-center justify-between font-label-lg text-label-lg font-bold">
+<span class="">8.70</span>
+<span class="text-[11px] uppercase tracking-wider font-semibold">Distinção Acadêmica</span>
+</div>
+</div>
+</div>
+<!-- Availability & Internship Workload Settings -->
+<div class="pt-space-sm grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="internShift">
+              Turno das Aulas Presenciais
+            </label>
+<select class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="internShift">
+<option selected="">Noite (18:30 às 22:00)</option>
+<option>Manhã (07:30 às 11:50)</option>
+<option>Tarde (13:30 às 17:50)</option>
+<option>Integral</option>
+</select>
+</div>
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="internAvailability">
+              Disponibilidade para Estágio Curricular / Não Obrigatório
+            </label>
+<select class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="internAvailability">
+<option selected="">30 horas semanais (Manhã ou Tarde - 6h/dia)</option>
+<option>20 horas semanais (4h/dia)</option>
+<option>Regime Híbrido Flexível</option>
+<option>Apenas Trabalho Remoto</option>
+</select>
+</div>
+</div>
+</section>
+<!-- BLOCO 3: LINKS PROFISSIONAIS & PORTFÓLIO -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md" id="bloco-links">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">link</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">3. Links Profissionais, Portfólio &amp; Lattes</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Conecte seus repositórios de código e perfis acadêmicos oficiais.</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">4 de 4 Adicionados</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- LinkedIn -->
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5" for="linkedinUrl">
+<span class="material-symbols-outlined text-[16px] text-[#0077b5]">share</span>
+<span class="">LinkedIn Profile</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="linkedinUrl" placeholder="https://linkedin.com/in/seu-usuario" type="url" value="https://linkedin.com/in/gabriel-medeiros-unicap">
+</div>
+<!-- GitHub -->
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5" for="githubUrl">
+<span class="material-symbols-outlined text-[16px] text-on-surface">code</span>
+<span class="">GitHub / GitLab</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="githubUrl" placeholder="https://github.com/seu-usuario" type="url" value="https://github.com/gabrielmedeiros-dev">
+</div>
+<!-- Portfólio Pessoal -->
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5" for="portfolioUrl">
+<span class="material-symbols-outlined text-[16px] text-secondary">language</span>
+<span class="">Portfólio Web Pessoal</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="portfolioUrl" placeholder="https://seusite.com.br" type="url" value="https://gabrielmedeiros.tech">
+</div>
+<!-- Currículo Lattes CNPq -->
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5" for="lattesUrl">
+<span class="material-symbols-outlined text-[16px] text-primary">history_edu</span>
+<span class="">Currículo Lattes (CNPq)</span>
+</label>
+<input class="w-full px-space-sm py-2.5 rounded bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="lattesUrl" placeholder="http://lattes.cnpq.br/id-cnpq" type="url" value="http://lattes.cnpq.br/4891029410948123">
+</div>
+</div>
+</section>
+<!-- BLOCO 4: COMPETÊNCIAS E HABILIDADES (HARD & SOFT SKILLS) -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-lg" id="bloco-competencias">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">4. Competências &amp; Tecnologias (Skills)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Competências técnicas e comportamentais processadas pelo sistema de recomendação.</p>
+</div>
+</div>
+</div>
+<div class="p-space-sm rounded-lg bg-secondary-fixed/40 text-on-secondary-fixed flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">lightbulb</span>
+<p class="font-body-sm text-body-sm">
+<strong>Dica de Matching:</strong> Competências marcadas com selo acadêmico foram validadas pelo seu desempenho em disciplinas obrigatórias do PPC de Ciência da Computação UNICAP.
+          </p>
+</div>
+<!-- Hard Skills Group -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+              Hard Skills &amp; Tecnologias
+            </span>
+<button class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span> Adicionar Competência
+            </button>
+</div>
+<div class="flex flex-wrap gap-space-xs pt-1" id="hardSkillsContainer">
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[14px] text-emerald-700">verified</span>
+<span class="">Python</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[14px] text-emerald-700">verified</span>
+<span class="">SQL Avançado</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[14px] text-emerald-700">verified</span>
+<span class="">PostgreSQL</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="">Power BI</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="">Docker</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="">React</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[14px] text-emerald-700">verified</span>
+<span class="">Modelagem de Dados</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md">
+<span class="">Git &amp; GitHub Flow</span>
+<button class="text-on-surface-variant hover:text-error ml-1" type="button">×</button>
+</span>
+</div>
+</div>
+<!-- Soft Skills Group -->
+<div class="space-y-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+              Soft Skills &amp; Habilidades Comportamentais
+            </span>
+<button class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span> Adicionar Habilidade
+            </button>
+</div>
+<div class="flex flex-wrap gap-space-xs pt-1">
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-secondary-fixed/50 text-on-secondary-fixed font-label-md text-label-md">
+<span class="">Resolução de Problemas Complexos</span>
+<button class="text-on-secondary-fixed-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-secondary-fixed/50 text-on-secondary-fixed font-label-md text-label-md">
+<span class="">Trabalho em Equipe Ágil (Scrum/Kanban)</span>
+<button class="text-on-secondary-fixed-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-secondary-fixed/50 text-on-secondary-fixed font-label-md text-label-md">
+<span class="">Comunicação Assertiva</span>
+<button class="text-on-secondary-fixed-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-secondary-fixed/50 text-on-secondary-fixed font-label-md text-label-md">
+<span class="">Pensamento Analítico</span>
+<button class="text-on-secondary-fixed-variant hover:text-error ml-1" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-secondary-fixed/50 text-on-secondary-fixed font-label-md text-label-md">
+<span class="">Aprendizado Contínuo</span>
+<button class="text-on-secondary-fixed-variant hover:text-error ml-1" type="button">×</button>
+</span>
+</div>
+</div>
+</section>
+<!-- BLOCO 5: IDIOMAS & PROFICIÊNCIA -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md" id="bloco-idiomas">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">translate</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">5. Idiomas &amp; Nível de Proficiência</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Classificação padronizada no Quadro Europeu Comum de Referência (CEFR).</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add_circle</span> Adicionar Idioma
+          </button>
+</div>
+<div class="space-y-space-sm">
+<!-- Idioma 1 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary">
+                EN
+              </div>
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-on-surface">Inglês</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Nível Avançado / Fluente para Negócios (CEFR C1)</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md w-full md:w-auto justify-between md:justify-end">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-emerald-50 text-emerald-800 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]">verified</span> Teste TOEFL ITP (Score: 590)
+              </span>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 hover:text-primary" type="button"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 hover:text-error" type="button"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Idioma 2 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary">
+                ES
+              </div>
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-on-surface">Espanhol</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Intermediário Independente (CEFR B1)</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md w-full md:w-auto justify-between md:justify-end">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container text-on-surface-variant text-label-sm font-label-sm">
+                Nivelamento Instituto Cervantes
+              </span>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 hover:text-primary" type="button"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 hover:text-error" type="button"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Idioma 3 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary">
+                FR
+              </div>
+<div>
+<h4 class="font-label-lg text-label-lg font-bold text-on-surface">Francês</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Básico Inicial (CEFR A2)</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md w-full md:w-auto justify-between md:justify-end">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container text-on-surface-variant text-label-sm font-label-sm">
+                Autodeclaração
+              </span>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-1 hover:text-primary" type="button"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 hover:text-error" type="button"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BLOCO 6: EXPERIÊNCIAS PROFISSIONAIS & PROJETOS ACADÊMICOS -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md" id="bloco-experiencias">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">work_history</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">6. Experiências Profissionais &amp; Projetos de Extensão</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Histórico de estágios, bolsas de pesquisa (PIBIC) e iniciativas universitárias.</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add_circle</span> Adicionar Experiência
+          </button>
+</div>
+<div class="space-y-space-md">
+<!-- Item 1: Iniciação Científica UNICAP -->
+<div class="p-space-md rounded-xl bg-surface-container-low space-y-space-xs relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary text-[11px] font-bold font-label-sm uppercase">Pesquisa / PIBIC</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Pesquisador Bolsista • Análise Preditiva de Dados Educacionais</h4>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Ago/2023 – Atual (Bolsista CNPq)</span>
+</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Universidade Católica de Pernambuco • Grupo de Engenharia de Dados &amp; IA</p>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed pt-1">
+              Desenvolvimento de modelos preditivos utilizando bibliotecas Scikit-Learn e Pandas para identificação precoce de risco de evasão acadêmica discente. Construção de dashboards analíticos interativos integrados a bancos de dados relacionais Postgres e relatórios em LaTeX para publicação no CONIC UNICAP.
+            </p>
+<div class="flex flex-wrap gap-1.5 pt-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">Python</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">Pandas</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">PostgreSQL</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">Machine Learning</span>
+</div>
+</div>
+<!-- Item 2: Estágio Anterior em Empresa -->
+<div class="p-space-md rounded-xl bg-surface-container-low space-y-space-xs relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-2 py-0.5 rounded bg-secondary text-on-secondary text-[11px] font-bold font-label-sm uppercase">Estágio</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Estagiário de Automação &amp; Suporte de TI</h4>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Fev/2023 – Jul/2023 (6 meses)</span>
+</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Inovatech Soluções • Recife Antigo / Porto Digital</p>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed pt-1">
+              Atuação em suporte a sistemas web internos, escrita de queries SQL complexas para extração de métricas de performance operacional e desenvolvimento de scripts Python para automação de rotinas de conciliação de chamados via API REST.
+            </p>
+<div class="flex flex-wrap gap-1.5 pt-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">SQL</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">Python Scripting</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] font-mono">REST APIs</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BLOCO 7: ATIVIDADES COMPLEMENTARES & CERTIFICAÇÕES -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md" id="bloco-certificacoes">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">military_tech</span>
+</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">7. Certificações &amp; Atividades Complementares</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cursos com certificação válida que somam carga horária no histórico discente.</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add_circle</span> Anexar Certificado
+          </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="p-space-md rounded-lg bg-surface-container-low flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[24px]">verified</span>
+<div class="space-y-1">
+<h5 class="font-label-lg text-label-lg font-bold text-on-surface">AWS Certified Cloud Practitioner</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Amazon Web Services • Emitido em Nov/2023</p>
+<span class="text-[11px] font-mono text-primary">ID: AWS-CC-894129</span>
+</div>
+</div>
+<div class="p-space-md rounded-lg bg-surface-container-low flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[24px]">verified</span>
+<div class="space-y-1">
+<h5 class="font-label-lg text-label-lg font-bold text-on-surface">Formação Engenharia de Dados com Apache Spark</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Alura Cursos Online • 80h • Jun/2023</p>
+<span class="text-[11px] text-emerald-700 font-semibold">Validado para 40h de AAC UNICAP</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BLOCO 8: EXPORTAÇÃO E DOWNLOAD DO CURRÍCULO (PADRÃO OFICIAL) -->
+<section class="bg-gradient-to-br from-primary via-primary-container to-primary text-on-primary rounded-xl p-space-xl shadow-lg relative overflow-hidden" id="bloco-exportar">
+<!-- Subtle Academic Decorative Motif -->
+<div class="absolute -right-12 -bottom-12 w-64 h-64 bg-secondary/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative flex flex-col md:flex-row items-center justify-between gap-space-xl">
+<div class="space-y-space-sm max-w-xl">
+<div class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-label-sm font-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="">Modelo Oficial Padronizado UNICAP</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-primary">
+              Pronto para Processos Seletivos e Estágio Curricular
+            </h3>
+<p class="font-body-md text-body-md text-surface-container-highest/90 leading-relaxed">
+              O layout de exportação segue rigorosamente as diretrizes da Pró-Reitoria Comunitária e Extensão da UNICAP, com cabeçalho timbrado oficial, chancela digital de autenticidade do SIGA e seções estruturadas para leitura via sistemas ATS corporativos.
+            </p>
+<div class="flex items-center gap-space-lg pt-space-xs">
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-surface-container-highest">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                Formato A4 Timbrado
+              </div>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-surface-container-highest">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                Compatível com Leitor ATS
+              </div>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-surface-container-highest">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                QR Code de Validação
+              </div>
+</div>
+</div>
+<!-- Document Preview Visual & Big CTA -->
+<div class="flex flex-col items-center shrink-0 w-full md:w-auto">
+<!-- Simulated Miniature Document Sheet -->
+<div class="w-44 h-56 bg-white rounded shadow-2xl p-3 flex flex-col justify-between transform hover:scale-105 transition-all duration-300 pointer-events-none select-none">
+<div>
+<div class="flex items-center justify-between pb-1.5 mb-1.5 bg-primary-container text-white px-1.5 py-1 rounded">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">school</span>
+<span class="text-[8px] font-bold tracking-wider uppercase">UNICAP Carreiras</span>
+</div>
+<span class="text-[7px] text-white/80">PDF Oficial</span>
+</div>
+<div class="space-y-1">
+<div class="h-2 w-3/4 bg-slate-700 rounded"></div>
+<div class="h-1.5 w-1/2 bg-slate-300 rounded"></div>
+</div>
+<div class="mt-2 space-y-1">
+<div class="h-1.5 w-full bg-slate-200 rounded"></div>
+<div class="h-1.5 w-5/6 bg-slate-200 rounded"></div>
+<div class="h-1.5 w-4/6 bg-slate-200 rounded"></div>
+</div>
+<div class="mt-2 space-y-1">
+<div class="h-1.5 w-2/3 bg-slate-300 rounded"></div>
+<div class="h-1.5 w-full bg-slate-100 rounded"></div>
+<div class="h-1.5 w-full bg-slate-100 rounded"></div>
+</div>
+</div>
+<div class="pt-1 flex items-center justify-between text-[7px] text-slate-400">
+<span class="">Página 1 de 1</span>
+<span class="font-mono text-[6px]">SIGA: 202110482</span>
+</div>
+</div>
+<!-- Download Button -->
+<button class="mt-space-md w-full inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-secondary-container text-on-secondary-container font-headline-sm text-headline-sm shadow-md hover:brightness-110 active:scale-98 transition-all font-bold" id="btnDownloadBottom" type="button">
+<span class="material-symbols-outlined text-[22px]">download</span>
+<span class="">Gerar Currículo em PDF</span>
+</button>
+<span class="mt-1 font-label-sm text-label-sm text-surface-container-high/80">Arquivo gerado instantaneamente</span>
+</div>
+</div>
+</section>
+<!-- PERSISTENCE BAR (BOTTOM ACTIONS) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-emerald-600 text-[24px]">cloud_done</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">Todas as alterações sincronizadas</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Seus dados ficam protegidos e criptografados pela infraestrutura UNICAP.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+<button class="px-space-md py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container font-label-lg text-label-lg transition-all" id="btnCancel" type="button">
+            Descartar
+          </button>
+<button class="inline-flex items-center gap-space-xs px-space-xl py-space-xs rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary transition-all font-bold" id="btnSaveBottom" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span class="">Salvar Currículo</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+<!-- INTERACTION MICRO-SCRIPTS -->
+<script>
+    (function() {
+      // Toast notification helper
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMsg');
+      
+      function showToast(message, isSuccess = true) {
+        if (!toast || !toastMsg) return;
+        toastMsg.textContent = message;
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+          toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 3200);
+      }
+
+      // Save Actions
+      const saveButtons = [document.getElementById('btnSaveTop'), document.getElementById('btnSaveBottom')];
+      saveButtons.forEach(btn => {
+        if (btn) {
+          btn.addEventListener('click', () => {
+            showToast('Currículo acadêmico salvo com sucesso no banco institucional!');
+          });
+        }
+      });
+
+      // PDF Download Trigger
+      const downloadButtons = [document.getElementById('btnDownloadTop'), document.getElementById('btnDownloadBottom')];
+      downloadButtons.forEach(btn => {
+        if (btn) {
+          btn.addEventListener('click', () => {
+            showToast('Gerando PDF Oficial UNICAP com chancela digital SIGA...');
+            setTimeout(() => {
+              showToast('Download concluído com sucesso!');
+            }, 1800);
+          });
+        }
+      });
+
+      // Preview CV modal simulation
+      const previewBtn = document.getElementById('btnPreviewCv');
+      if (previewBtn) {
+        previewBtn.addEventListener('click', () => {
+          showToast('Abrindo modo de pré-visualização para recrutadores...');
+        });
+      }
+
+      // Visibility Toggle Interactive feedback
+      const visibilityToggle = document.getElementById('visibilityToggle');
+      const visibilityText = document.getElementById('visibilityStatusText');
+
+      if (visibilityToggle && visibilityText) {
+        visibilityToggle.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            visibilityText.innerHTML = '<strong class="text-primary font-semibold">Visível para Recrutadores:</strong> Seu currículo está ativo para triagens de empresas e convênios credenciados da UNICAP.';
+            showToast('Currículo visível no Banco de Talentos UNICAP.');
+          } else {
+            visibilityText.innerHTML = '<strong class="text-on-surface-variant font-semibold">Modo Privado:</strong> Seu currículo NÃO aparecerá nas buscas ativas de recrutadores externos.';
+            showToast('Perfil alterado para Privado (Invisível no Banco).');
+          }
+        });
+      }
+
+      // Discard button
+      const cancelBtn = document.getElementById('btnCancel');
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          if (confirm('Deseja restaurar as informações para o último salvamento verificado?')) {
+            showToast('Dados restaurados com base no SIGA UNICAP.');
+          }
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl py-space-xl shadow-[0_-1px_8px_rgba(0,0,0,0.02)]"><div class="w-full max-w-[1440px] mx-auto px-layout-margin-desktop flex flex-col md:flex-row items-center justify-between gap-space-md font-label-md text-label-md text-on-surface-variant"><div class=""><span class="font-bold text-on-surface">UNICAP</span> — Universidade Católica de Pernambuco | Central de Oportunidades &amp; Empregabilidade</div><div class="flex items-center gap-space-lg"><a class="hover:text-primary transition-colors" href="#">Suporte e Contato</a></div></div></footer></body></html>
