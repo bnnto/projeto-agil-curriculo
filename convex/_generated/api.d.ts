@@ -8,7 +8,12 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
+import type * as authHelpers from "../authHelpers.js";
+import type * as authorize from "../authorize.js";
 import type * as crons from "../crons.js";
+import type * as http from "../http.js";
+import type * as password from "../password.js";
 
 import type {
   ApiFromModules,
@@ -17,7 +22,12 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  auth: typeof auth;
+  authHelpers: typeof authHelpers;
+  authorize: typeof authorize;
   crons: typeof crons;
+  http: typeof http;
+  password: typeof password;
 }>;
 
 /**

@@ -1,0 +1,103 @@
+import type { GenericActionCtxWithAuthConfig } from "@convex-dev/auth/server";
+import type { DataModel } from "./_generated/dataModel.js";
+import { api, internal } from "./_generated/api.js";
+import { hashPassword, verifyPassword } from "./password"; // runtime padrão (Web Crypto)
+import { isValidEmail, normalizeEmail } from "../src/lib/auth";
+import { isRole } from "../src/lib/roles";
+
+type AuthorizeCtx = GenericActionCtxWithAuthConfig<DataModel>;
+
+interface Credentials {
+  email: string;
+  password: string;
+  /** Fluxo de cadastro (opcional): nome e papel do novo usuário. */
+  name?: string;
+  role?: string;
+  flow?: "signUp" | "signIn";
+}
+
+function parseCredentials(raw: unknown): Credentials | null {
+  if (typeof raw !== "object" || raw === null) return null;
+  const c = raw as Record<string, unknown>;
+  if (typeof c.email !== "string" || typeof c.password !== "string") {
+    return null;
+  }
+  return {
+    email: c.email,
+    password: c.password,
+    name: typeof c.name === "string" ? c.name : undefined,
+    role: typeof c.role === "string" ? c.role : undefined,
+    flow: c.flow === "signUp" ? "signUp" : "signIn",
+  };
+}
+
+/**
+ * Lógica de authorize do provider ConvexCredentials (issue [S1-1]).
+ *
+ * - signUp: cria `users` + conta de credenciais com hash scrypt e papel validado.
+ * - signIn: recupera a conta, verifica a senha e exige usuário ativo.
+ *
+ * Erros de negócio são lançados como Error com mensagem clara — o Convex Auth
+ * propaga a mensagem ao cliente via `signIn` rejeitado.
+ */
+export const authorizeConfig = {
+  id: "credentials-email",
+  authorize: async (rawCredentials: unknown, ctx: AuthorizeCtx) => {
+    const credentials = parseCredentials(rawCredentials);
+    if (credentials === null) {
+      throw new Error("E-mail e senha são obrigatórios.");
+    }
+    const email = normalizeEmail(credentials.email);
+    const password = credentials.password;
+    if (!isValidEmail(email)) {
+      throw new Error("E-mail inválido.");
+    }
+    if (password.length < 8) {
+      throw new Error("A senha deve ter pelo menos 8 caracteres.");
+    }
+
+    const flow = credentials.flow ?? "signIn";
+
+    if (flow === "signUp") {
+      const name = credentials.name?.trim() ?? "";
+      const role = credentials.role;
+      if (name.length < 3) {
+        throw new Error("Informe seu nome completo.");
+      }
+      if (!isRole(role)) {
+        throw new Error("Selecione um papel válido.");
+      }
+
+      const existing = await ctx.runQuery(api.authHelpers.lookupByEmail, {
+        email,
+      });
+      if (existing !== null) {
+        throw new Error("Já existe conta com este e-mail.");
+      }
+      const secret = await hashPassword(password);
+      const userId = await ctx.runMutation(internal.authHelpers.createUser, {
+        email,
+        name,
+        role,
+        secret,
+      });
+      return { userId };
+    }
+
+    // signIn
+    const account = await ctx.runQuery(internal.authHelpers.findAccount, {
+      email,
+    });
+    if (account === null) {
+      throw new Error("E-mail ou senha incorretos.");
+    }
+    const ok = await verifyPassword(password, account.secret);
+    if (!ok) {
+      throw new Error("E-mail ou senha incorretos.");
+    }
+    if (!account.active) {
+      throw new Error("Conta desativada. Procure a coordenação.");
+    }
+    return { userId: account.userId };
+  },
+};
