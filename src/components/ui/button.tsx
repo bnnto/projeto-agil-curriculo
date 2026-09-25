@@ -4,7 +4,8 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const VARIANT_CLASSES: Record<NonNullable<ButtonProps["variant"]>, string> = {
   // Bordô institucional — hover #520F1D, foco com halo dourado (DESIGN.md)
-  primary: "bg-primary text-white hover:bg-[#520F1D] focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2",
+  primary:
+    "bg-primary text-white hover:bg-[#520F1D] focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2",
   // Contorno bordô sobre branco — hover #FDF2F4 (DESIGN.md)
   secondary:
     "border border-primary bg-white text-primary hover:bg-[#FDF2F4] focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2",

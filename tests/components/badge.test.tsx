@@ -8,12 +8,15 @@ describe("Badge — semântica de status (DESIGN.md)", () => {
     ["triagem", "bg-amber-50", "text-amber-800"],
     ["reprovado", "bg-red-50", "text-red-800"],
     ["andamento", "bg-blue-50", "text-blue-800"],
-  ] as const)("variante %s usa o par de cores institucional", (variant, bg, text) => {
-    render(<Badge variant={variant}>Status</Badge>);
-    const el = screen.getByText("Status");
-    expect(el.className).toContain(bg);
-    expect(el.className).toContain(text);
-  });
+  ] as const)(
+    "variante %s usa o par de cores institucional",
+    (variant, bg, text) => {
+      render(<Badge variant={variant}>Status</Badge>);
+      const el = screen.getByText("Status");
+      expect(el.className).toContain(bg);
+      expect(el.className).toContain(text);
+    },
+  );
 
   it("renderiza como elemento inline com texto do status", () => {
     render(<Badge variant="aprovado">Aprovado</Badge>);

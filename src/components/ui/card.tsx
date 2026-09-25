@@ -22,7 +22,7 @@ export function Card({ title, accent, children }: CardProps) {
       className={`rounded-lg border border-slate-200 bg-white shadow-level1 ${accentClass ? `border-l-4 ${accentClass}` : ""}`}
     >
       <h3 className="font-serif text-lg font-bold text-primary">{title}</h3>
-     <div className="mt-2">{children}</div>
+      <div className="mt-2">{children}</div>
     </section>
-    );
+  );
 }

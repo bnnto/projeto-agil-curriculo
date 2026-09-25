@@ -16,13 +16,21 @@ describe("Card (componente ui/ próprio e leve)", () => {
   });
 
   it("aplica acento bordô (primary) via borda esquerda", () => {
-    render(<Card title="Título" accent="primary">x</Card>);
+    render(
+      <Card title="Título" accent="primary">
+        x
+      </Card>,
+    );
     const card = screen.getByTestId("card");
     expect(card.className).toContain("border-l-primary");
   });
 
   it("aplica acento dourado (secondary) via borda esquerda", () => {
-    render(<Card title="Título" accent="secondary">x</Card>);
+    render(
+      <Card title="Título" accent="secondary">
+        x
+      </Card>,
+    );
     const card = screen.getByTestId("card");
     expect(card.className).toContain("border-l-secondary");
   });

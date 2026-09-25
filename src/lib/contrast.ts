@@ -33,7 +33,10 @@ function relativeLuminance(hex: string): number {
 }
 
 /** Razão de contraste (1 a 21), independente da ordem das cores. */
-export function getContrastRatio(foreground: string, background: string): number {
+export function getContrastRatio(
+  foreground: string,
+  background: string,
+): number {
   const l1 = relativeLuminance(foreground);
   const l2 = relativeLuminance(background);
   const lighter = Math.max(l1, l2);

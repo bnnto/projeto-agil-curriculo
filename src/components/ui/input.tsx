@@ -36,7 +36,11 @@ export function Input({ label, error, id, required, ...rest }: InputProps) {
         {...rest}
       />
       {error ? (
-        <p id={errorId} role="alert" className="text-xs font-medium text-danger">
+        <p
+          id={errorId}
+          role="alert"
+          className="text-xs font-medium text-danger"
+        >
           {error}
         </p>
       ) : null}

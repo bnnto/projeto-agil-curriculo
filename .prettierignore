@@ -1,0 +1,6 @@
+dist/
+coverage/
+convex/_generated/
+bun.lock
+*.md
+stitch_portal_de_carreiras_unicap/
