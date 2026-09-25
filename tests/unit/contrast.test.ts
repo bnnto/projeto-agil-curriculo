@@ -44,16 +44,8 @@ describe("meetsWcagAA — pares obrigatórios do Design System", () => {
   const pairs: Array<[string, string, string]> = [
     // [descrição, texto, fundo]
     ["texto branco sobre botão primário bordô", COLORS.white, COLORS.primary],
-    [
-      "texto branco sobre hover bordô",
-      COLORS.white,
-      COLORS["primary-hover"],
-    ],
-    [
-      "título bordô sobre card branco",
-      COLORS.primary,
-      COLORS.white,
-    ],
+    ["texto branco sobre hover bordô", COLORS.white, COLORS["primary-hover"]],
+    ["título bordô sobre card branco", COLORS.primary, COLORS.white],
     [
       "corpo de texto slate-900 sobre canvas",
       COLORS["slate-900"],
@@ -64,11 +56,7 @@ describe("meetsWcagAA — pares obrigatórios do Design System", () => {
       COLORS["slate-600"],
       COLORS.canvas,
     ],
-    [
-      "título bordô sobre canvas",
-      COLORS.primary,
-      COLORS.canvas,
-    ],
+    ["título bordô sobre canvas", COLORS.primary, COLORS.canvas],
     [
       "texto branco sobre success (badge aprovado)",
       COLORS.white,

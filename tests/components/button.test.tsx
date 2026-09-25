@@ -7,7 +7,9 @@ describe("Button", () => {
   it("renderiza o rótulo e é clicável", async () => {
     const onClick = vi.fn();
     render(<Button onClick={onClick}>Publicar vaga</Button>);
-    await userEvent.click(screen.getByRole("button", { name: "Publicar vaga" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Publicar vaga" }),
+    );
     expect(onClick).toHaveBeenCalledOnce();
   });
 
