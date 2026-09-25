@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-canvas font-sans text-slate-900 antialiased;
+}
+
+/* Foco visível com halo dourado — acessibilidade (CEREBRO.md §6.3) */
+:focus-visible {
+  outline: 2px solid theme("colors.secondary");
+  outline-offset: 2px;
+}
