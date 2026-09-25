@@ -9,5 +9,10 @@ export default defineConfig({
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.test.{ts,tsx}"],
     css: false,
+    coverage: {
+      provider: "v8",
+      include: ["src/**"],
+      exclude: ["src/main.tsx"], // bootstrap React
+    },
   },
 });
