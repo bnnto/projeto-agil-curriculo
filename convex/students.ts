@@ -11,6 +11,7 @@ import {
   addSkill,
   type LanguageEntry,
 } from "../src/lib/skills";
+import { validateResumeData } from "../src/lib/resume";
 import { recruiterProjection } from "../src/lib/visibility";
 
 /**
@@ -293,6 +294,66 @@ export const setContactConsent = mutation({
     }
     await ctx.db.patch(student._id, { showContactToRecruiters: allow });
     return { ok: true as const, allow };
+  },
+});
+
+/**
+ * [S2-1] — Salva o Currículo Vitae do aluno autenticado em `resumeData`.
+ * Valida com a mesma regra pura do formulário (mensagens claras) e exige
+ * perfil existente (o CV é composto sobre o cadastro da [S1-3]).
+ */
+export const saveResumeData = mutation({
+  args: {
+    headline: v.string(),
+    summary: v.string(),
+    experiences: v.array(
+      v.object({
+        company: v.string(),
+        role: v.string(),
+        period: v.string(),
+        description: v.string(),
+      }),
+    ),
+    academicHistory: v.array(
+      v.object({
+        item: v.string(),
+        year: v.number(),
+      }),
+    ),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) throw new Error("Não autenticado.");
+    const email = identity.email ?? identity.tokenIdentifier;
+    const consent = (await ctx.runQuery(
+      internal.consents.requireActiveConsent,
+      { email },
+    )) as { ok: boolean; userId?: Id<"users">; role?: string | null };
+    if (!consent.ok || consent.userId === undefined) {
+      throw new Error("Aceite o Termo de Consentimento LGPD vigente.");
+    }
+    if (consent.role !== "aluno" || consent.userId === undefined) {
+      throw new Error("Apenas alunos editam o próprio currículo.");
+    }
+    const studentUserId = consent.userId;
+
+    const student = await ctx.db
+      .query("students")
+      .withIndex("by_user", (q) => q.eq("userId", studentUserId))
+      .unique();
+    if (student === null) {
+      throw new Error(
+        "Complete o cadastro do perfil antes de preencher o currículo.",
+      );
+    }
+
+    const validation = validateResumeData(args);
+    if (!validation.ok) {
+      throw new Error(validation.errors.join(" "));
+    }
+
+    await ctx.db.patch(student._id, { resumeData: validation.normalized });
+    return { ok: true as const, savedAt: Date.now() };
   },
 });
 

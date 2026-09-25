@@ -98,6 +98,31 @@ export default defineSchema({
         }),
       ),
     ),
+
+    /**
+     * [S2-1] — Currículo Vitae (headline, resumo, experiências, histórico
+     * acadêmico). Validado pela regra pura em src/lib/resume.ts.
+     */
+    resumeData: v.optional(
+      v.object({
+        headline: v.string(),
+        summary: v.string(),
+        experiences: v.array(
+          v.object({
+            company: v.string(),
+            role: v.string(),
+            period: v.string(),
+            description: v.string(),
+          }),
+        ),
+        academicHistory: v.array(
+          v.object({
+            item: v.string(),
+            year: v.number(),
+          }),
+        ),
+      }),
+    ),
   })
     .index("by_user", ["userId"])
     .index("by_enrollment", ["enrollment"])
