@@ -54,8 +54,9 @@ export const createUser = internalMutation({
       v.literal("empresa"),
     ),
     secret: v.string(),
+    consentTermVersion: v.string(),
   },
-  handler: async (ctx, { email, name, role, secret }) => {
+  handler: async (ctx, { email, name, role, secret, consentTermVersion }) => {
     const userId = await ctx.db.insert("users", {
       email,
       name,
@@ -67,6 +68,13 @@ export const createUser = internalMutation({
       provider: "credentials-email",
       providerAccountId: email,
       secret,
+    });
+    // R7 — aceite do termo LGPD gravado atomicamente com o cadastro
+    // (issue [S1-2]); o criador do usuário concordou com esta versão.
+    await ctx.db.insert("consents", {
+      userId,
+      termVersion: consentTermVersion,
+      acceptedAt: Date.now(),
     });
     return userId;
   },

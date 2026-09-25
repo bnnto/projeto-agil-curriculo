@@ -4,6 +4,7 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import "./index.css";
 import App from "./App";
 import { AuthProvider } from "./components/auth/AuthProvider";
+import { ConsentGate } from "./components/auth/ConsentGate";
 
 const convexUrl: unknown = import.meta.env.VITE_CONVEX_URL;
 if (typeof convexUrl !== "string" || convexUrl.length === 0) {
@@ -23,7 +24,9 @@ createRoot(rootElement).render(
   <StrictMode>
     <ConvexProvider client={convex}>
       <AuthProvider client={convex}>
-        <App />
+        <ConsentGate>
+          <App />
+        </ConsentGate>
       </AuthProvider>
     </ConvexProvider>
   </StrictMode>,
