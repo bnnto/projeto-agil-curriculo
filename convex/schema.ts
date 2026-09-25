@@ -45,4 +45,37 @@ export default defineSchema({
     termVersion: v.string(),
     acceptedAt: v.number(),
   }).index("by_user", ["userId"]),
+
+  /**
+   * Perfil do aluno/egresso (issue [S1-3], R1).
+   * Um perfil por usuário (índice by_user único na prática).
+   * `enrollment` normalizado (só dígitos) para unicidade da matrícula;
+   * `status` alimenta a regra de vínculo (R1) nas buscas de talentos.
+   * Visibilidade e contato (R2/R6) chegam na [S1-4] com defaults seguros.
+   */
+  students: defineTable({
+    userId: v.id("users"),
+    fullName: v.string(),
+    enrollment: v.string(),
+    status: v.union(
+      v.literal("ativo"),
+      v.literal("egresso"),
+      v.literal("inativo"),
+    ),
+    course: v.string(),
+    graduationYear: v.number(),
+    semester: v.optional(v.number()),
+    location: v.optional(v.string()),
+    linkedinUrl: v.optional(v.string()),
+    portfolioUrl: v.optional(v.string()),
+    availability: v.union(
+      v.literal("estagio"),
+      v.literal("integral"),
+      v.literal("meio_periodo"),
+      v.literal("freelancer"),
+    ),
+  })
+    .index("by_user", ["userId"])
+    .index("by_enrollment", ["enrollment"])
+    .index("by_status_course", ["status", "course"]),
 });

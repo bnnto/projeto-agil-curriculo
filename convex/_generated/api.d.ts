@@ -16,6 +16,7 @@ import type * as consents from "../consents.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as password from "../password.js";
+import type * as students from "../students.js";
 
 import type {
   ApiFromModules,
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   http: typeof http;
   password: typeof password;
+  students: typeof students;
 }>;
 
 /**
