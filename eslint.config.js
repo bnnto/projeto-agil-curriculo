@@ -5,7 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", "coverage", "src/convex/_generated"] },
+  { ignores: ["dist", "coverage", "convex/_generated"] },
   // Configurações de build/tooling: lint básico + globals Node
   {
     files: [
