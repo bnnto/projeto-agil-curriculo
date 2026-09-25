@@ -4,6 +4,15 @@
 
 :root {
   color-scheme: light;
+
+  /* Tokens institucionais UNICAP — espelham tailwind.config.ts (DESIGN.md) */
+  --color-primary: #6b1426;
+  --color-primary-hover: #520f1d;
+  --color-secondary: #c89d3c;
+  --color-canvas: #f8f9fa;
+  --color-success: #047857;
+  --color-warning: #b45309;
+  --color-danger: #dc2626;
 }
 
 body {
