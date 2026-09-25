@@ -1,14 +1,15 @@
 import { query, mutation, internalQuery } from "./_generated/server";
-import { internal } from "./_generated/api";
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
 import {
   validateStudentProfile,
   type StudentProfileInput,
 } from "../src/lib/studentProfile";
+import { recruiterProjection } from "../src/lib/visibility";
 
 /**
- * Perfil do aluno/egresso (issue [S1-3], R1).
+ * Perfil do aluno/egresso (issues [S1-3]/[S1-4], R1/R2/R6).
  * Toda mutação exige consentimento vigente (R7, issue [S1-2]) — checado no
  * servidor via `requireActiveConsent`, não apenas na UI.
  */
@@ -61,9 +62,10 @@ export const myProfile = query({
 });
 
 /**
- * Upsert do perfil completo do aluno autenticado (CA 1).
+ * Upsert do perfil completo do aluno autenticado (CA 1 de [S1-3]).
  * Valida no servidor (mesma regra pura do formulário) e garante matrícula
- * única (CA 2). Usuário inativo não pode salvar perfil.
+ * única (CA 2 de [S1-3]). Preserva `visibility`/`showContactToRecruiters`
+ * (S1-4) — essas flags têm mutation própria.
  */
 export const upsertProfile = mutation({
   args: {
@@ -172,8 +174,129 @@ export const upsertProfile = mutation({
       linkedinUrl: profile.linkedinUrl,
       portfolioUrl: profile.portfolioUrl,
       availability: profile.availability,
+      // S1-4 — defaults seguros: privado até o aluno escolher expor-se.
+      visibility: "somente_candidaturas",
+      showContactToRecruiters: false,
     });
     return { studentId, created: true as const };
+  },
+});
+
+/**
+ * R2 (issue [S1-4]) — toggle "Visível para recrutadores" ×
+ * "apenas candidaturas ativas". Persistido no perfil do aluno.
+ */
+export const setVisibility = mutation({
+  args: {
+    visibility: v.union(
+      v.literal("publico"),
+      v.literal("somente_candidaturas"),
+    ),
+  },
+  handler: async (ctx, { visibility }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) throw new Error("Não autenticado.");
+    const email = identity.email ?? identity.tokenIdentifier;
+    const consent = (await ctx.runQuery(
+      internal.consents.requireActiveConsent,
+      { email },
+    )) as { ok: boolean; userId?: Id<"users">; role?: string | null };
+    if (!consent.ok || consent.userId === undefined) {
+      throw new Error("Aceite o Termo de Consentimento LGPD vigente.");
+    }
+    const studentUserId = consent.userId;
+    if (consent.role !== "aluno") {
+      throw new Error("Apenas alunos alteram a própria visibilidade.");
+    }
+    const student = await ctx.db
+      .query("students")
+      .withIndex("by_user", (q) => q.eq("userId", studentUserId))
+      .unique();
+    if (student === null) {
+      throw new Error(
+        "Complete o cadastro do perfil antes de alterar a visibilidade.",
+      );
+    }
+    await ctx.db.patch(student._id, { visibility });
+    return { ok: true as const, visibility };
+  },
+});
+
+/**
+ * R6 (issue [S1-4]) — autorização geral de contato para recrutadores.
+ * Default seguro: false; o aluno autoriza, nunca o contrário.
+ */
+export const setContactConsent = mutation({
+  args: { allow: v.boolean() },
+  handler: async (ctx, { allow }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) throw new Error("Não autenticado.");
+    const email = identity.email ?? identity.tokenIdentifier;
+    const consent = (await ctx.runQuery(
+      internal.consents.requireActiveConsent,
+      { email },
+    )) as { ok: boolean; userId?: Id<"users">; role?: string | null };
+    if (!consent.ok || consent.userId === undefined) {
+      throw new Error("Aceite o Termo de Consentimento LGPD vigente.");
+    }
+    const studentUserId = consent.userId;
+    if (consent.role !== "aluno") {
+      throw new Error(
+        "Apenas alunos alteram a própria autorização de contato.",
+      );
+    }
+    const student = await ctx.db
+      .query("students")
+      .withIndex("by_user", (q) => q.eq("userId", studentUserId))
+      .unique();
+    if (student === null) {
+      throw new Error(
+        "Complete o cadastro do perfil antes de autorizar contato.",
+      );
+    }
+    await ctx.db.patch(student._id, { showContactToRecruiters: allow });
+    return { ok: true as const, allow };
+  },
+});
+
+/**
+ * Perfil público (R2) — o que um recrutador/visitante pode ver de um aluno.
+ * Projeção no SERVIDOR: contato (R6) omitido quando não autorizado e perfil
+ * inteiro oculto quando a regra R2 não permite a visualização.
+ * `jobId` opcional: quando informado, avalia visibilidade no contexto da vaga.
+ */
+export const publicProfile = query({
+  args: {
+    studentId: v.id("students"),
+    jobId: v.optional(v.id("jobs")),
+  },
+  handler: async (ctx, { studentId, jobId }) => {
+    const student = await ctx.db.get(studentId);
+    if (student === null) return null;
+    // R1 — inativo não participa. R2 — avaliação de visibilidade.
+    const view = recruiterProjection(
+      {
+        status: student.status,
+        visibility: student.visibility ?? "somente_candidaturas",
+        showContactToRecruiters: student.showContactToRecruiters ?? false,
+        contactReleasedTo: [], // candidaturas ativas chegam na [S3-4]
+        fullName: student.fullName,
+        course: student.course,
+      },
+      jobId ?? null,
+    );
+    if (view === null) return null;
+    // Enriquecimento público (sem contato): links e dados acadêmicos gerais.
+    return {
+      ...view,
+      graduationYear: student.graduationYear,
+      location: student.location ?? null,
+      linkedinUrl:
+        view.email !== undefined ? (student.linkedinUrl ?? null) : null,
+      portfolioUrl:
+        view.email !== undefined ? (student.portfolioUrl ?? null) : null,
+      availability: student.availability,
+    };
   },
 });
 
@@ -204,6 +327,8 @@ export const resolveStudent = internalQuery({
               studentId: student._id,
               status: student.status,
               enrollment: student.enrollment,
+              visibility: student.visibility ?? "somente_candidaturas",
+              showContactToRecruiters: student.showContactToRecruiters ?? false,
             }
           : null,
     };
