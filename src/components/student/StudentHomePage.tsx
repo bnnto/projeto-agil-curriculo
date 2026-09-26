@@ -3,6 +3,7 @@ import { StudentProfileForm } from "./StudentProfileForm";
 import { PrivacySettings } from "./PrivacySettings";
 import { ResumeForm } from "./ResumeForm";
 import { ResumeDownload } from "./ResumeDownload";
+import { JobOpportunities } from "./JobOpportunities";
 
 /**
  * Home do aluno (issue [S1-3]): cadastro/edição do perfil em Card
@@ -41,6 +42,9 @@ export function StudentHomePage() {
           />
           <ResumeDownload />
         </Card>
+      </div>
+      <div className="mt-6">
+        <JobOpportunities />
       </div>
     </div>
   );

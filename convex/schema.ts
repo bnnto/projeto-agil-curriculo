@@ -169,7 +169,55 @@ export default defineSchema({
      */
     publishedAt: v.optional(v.number()),
     expiresAt: v.optional(v.number()),
+    /**
+     * [S3-4] Insumos dos bônus do matching (R8): idioma mínimo exigido e
+     * disponibilidade desejada — opcionais; ausentes, o bônus não entra.
+     */
+    requiredLanguage: v.optional(
+      v.object({
+        name: v.string(),
+        level: v.union(
+          v.literal("basico"),
+          v.literal("intermediario"),
+          v.literal("avancado"),
+          v.literal("fluente"),
+          v.literal("nativo"),
+        ),
+      }),
+    ),
+    availability: v.optional(
+      v.union(
+        v.literal("estagio"),
+        v.literal("integral"),
+        v.literal("meio_periodo"),
+        v.literal("freelancer"),
+      ),
+    ),
   })
     .index("by_recruiter", ["recruiterId"])
     .index("by_status", ["status"]),
+
+  /**
+   * Candidaturas dos alunos às vagas (issue [S3-4], R8).
+   * `matchScore` (0–100) é calculado NO SERVIDOR na mutation `applyToJob`
+   * com a regra pura de matching (S3-3) — fonte da verdade (CA 1).
+   * `stage` segue o pipeline (CA 3); mudanças de etapa chegam na S4-2.
+   */
+  applications: defineTable({
+    jobId: v.id("jobs"),
+    studentId: v.id("students"),
+    stage: v.union(
+      v.literal("inscrito"),
+      v.literal("triagem"),
+      v.literal("entrevista"),
+      v.literal("proposta"),
+      v.literal("contratado"),
+      v.literal("reprovado"),
+    ),
+    matchScore: v.number(),
+    appliedAt: v.number(),
+  })
+    .index("by_job", ["jobId"])
+    .index("by_student", ["studentId"])
+    .index("by_job_stage", ["jobId", "stage"]),
 });

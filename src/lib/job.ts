@@ -1,8 +1,10 @@
 /**
- * Validação pura de Vagas (issue [S3-1]).
+ * Validação pura de Vagas (issues [S3-1]/[S3-4]).
  * Compartilhada entre o formulário do recrutador e a mutation Convex
  * (`jobs.upsertJob`) — TDD, sem I/O.
  */
+import type { LanguageLevel } from "./skills";
+import type { Availability } from "./studentProfile";
 
 /** Tipos de contrato suportados (CEREBRO.md §4.2 — tabela `jobs`). */
 export const CONTRACT_TYPES = ["estagio", "clt", "pj", "temporario"] as const;
@@ -30,6 +32,9 @@ export type JobInput = {
   salaryMin?: number;
   salaryMax?: number;
   location?: string;
+  /** [S3-4] Insumos do matching (R8): idioma mínimo e disponibilidade. */
+  requiredLanguage?: { name: string; level: LanguageLevel };
+  availability?: Availability;
 };
 
 export type JobValidation =
@@ -136,6 +141,17 @@ export function validateJob(input: JobInput): JobValidation {
 
   if (errors.length > 0) return { ok: false, errors };
 
+  // [S3-4] Idioma exigido: nome obrigatório quando informado (nível sempre válido).
+  const requiredLanguageName = input.requiredLanguage?.name?.trim() ?? "";
+  if (
+    input.requiredLanguage !== undefined &&
+    requiredLanguageName.length === 0
+  ) {
+    errors.push("Informe o nome do idioma exigido (ou remova a exigência).");
+  }
+
+  if (errors.length > 0) return { ok: false, errors };
+
   const location = input.location?.trim();
 
   return {
@@ -149,6 +165,11 @@ export function validateJob(input: JobInput): JobValidation {
       salaryMax,
       location:
         location !== undefined && location.length > 0 ? location : undefined,
+      requiredLanguage:
+        input.requiredLanguage !== undefined && requiredLanguageName.length > 0
+          ? { name: requiredLanguageName, level: input.requiredLanguage.level }
+          : undefined,
+      availability: input.availability,
     },
   };
 }
