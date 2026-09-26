@@ -1,7 +1,8 @@
 import { query, mutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
-import type { Id } from "./_generated/dataModel";
+import type { Doc, Id } from "./_generated/dataModel";
+import { CURRENT_TERM_VERSION } from "./consentTerms";
 import {
   validateStudentProfile,
   type StudentProfileInput,
@@ -14,8 +15,11 @@ import {
 import { validateResumeData } from "../src/lib/resume";
 import {
   canAppearInTalentBank,
+  chooseTalentScanPlan,
   filterTalentCandidates,
   formatTalentSummary,
+  TALENT_SCAN_BATCH,
+  toTalentCandidate,
   type TalentCandidate,
   type TalentFilters,
 } from "../src/lib/talentSearch";
@@ -447,17 +451,27 @@ export const searchTalent = query({
     const identity = await ctx.auth.getUserIdentity();
     if (identity === null) throw new Error("Não autenticado.");
     const email = identity.email ?? identity.tokenIdentifier;
-    const consent = (await ctx.runQuery(
-      internal.consents.requireActiveConsent,
-      { email },
-    )) as { ok: boolean; role?: string | null };
-    if (!consent.ok) {
+
+    // R7 + papel — uma única resolução do guard por consulta.
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", email))
+      .unique();
+    if (user === null) throw new Error("Usuário não encontrado.");
+    const consents = await ctx.db
+      .query("consents")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .collect();
+    const hasConsent = consents.some(
+      (c) => c.termVersion === CURRENT_TERM_VERSION,
+    );
+    if (!hasConsent) {
       throw new Error("Aceite o Termo de Consentimento LGPD vigente.");
     }
     if (
-      consent.role !== "recrutador" &&
-      consent.role !== "gestor" &&
-      consent.role !== "empresa"
+      user.role !== "recrutador" &&
+      user.role !== "gestor" &&
+      user.role !== "empresa"
     ) {
       throw new Error(
         "Apenas recrutadores e gestores acessam o Banco de Talentos.",
@@ -476,29 +490,38 @@ export const searchTalent = query({
       page: args.page,
     };
 
-    // R1+R2 já no índice: varre apenas perfis públicos ativos e egressos.
+    // [S2-4] Plano de consulta indexado (regra pura `chooseTalentScanPlan`):
+    // disponibilidade informada → by_status_availability; caso contrário,
+    // entrada padrão by_visibility_status. R1+R2 já na varredura, nunca
+    // full-scan. Filtros por igualdade exata de curso/cidade/competência/
+    // idioma são aplicados em memória sobre o resultado do índice.
+    const plan = chooseTalentScanPlan(args.availability);
     const rows: TalentCandidate[] = [];
-    for (const status of ["ativo", "egresso"] as const) {
-      const batch = await ctx.db
-        .query("students")
-        .withIndex("by_visibility_status", (q) =>
-          q.eq("visibility", "publico").eq("status", status),
-        )
-        .collect();
+    for (const status of plan.statuses) {
+      let batch: Doc<"students">[];
+      if (plan.index === "by_status_availability") {
+        // Faixa por (status, availability): R1 no prefixo, filtro no índice.
+        batch = await ctx.db
+          .query("students")
+          .withIndex("by_status_availability", (q) =>
+            q
+              .eq("status", status)
+              .eq("availability", args.availability ?? "estagio"),
+          )
+          .order("desc")
+          .take(TALENT_SCAN_BATCH);
+      } else {
+        // Entrada padrão: R1+R2 já no índice (visibility=publico × status).
+        batch = await ctx.db
+          .query("students")
+          .withIndex("by_visibility_status", (q) =>
+            q.eq("visibility", "publico").eq("status", status),
+          )
+          .order("desc")
+          .take(TALENT_SCAN_BATCH);
+      }
       for (const doc of batch) {
-        rows.push({
-          id: doc._id,
-          fullName: doc.fullName,
-          course: doc.course,
-          status: doc.status,
-          visibility: "publico",
-          graduationYear: doc.graduationYear,
-          semester: doc.semester ?? null,
-          location: doc.location ?? null,
-          availability: doc.availability,
-          skills: doc.skills ?? [],
-          languages: doc.languages ?? [],
-        });
+        rows.push(toTalentCandidate(doc));
       }
     }
 

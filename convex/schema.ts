@@ -127,5 +127,11 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_enrollment", ["enrollment"])
     .index("by_status_course", ["status", "course"])
-    .index("by_visibility_status", ["visibility", "status"]),
+    .index("by_visibility_status", ["visibility", "status"])
+    /**
+     * [S2-4] Entrada alternativa da busca do Banco de Talentos quando o
+     * recrutador filtra disponibilidade: prefixo por status (R1) e faixa
+     * por disponibilidade. Evita varrer todos os públicos ativos+egressos.
+     */
+    .index("by_status_availability", ["status", "availability"]),
 });
