@@ -2,6 +2,7 @@ import { AuthPage } from "./components/auth/AuthPage";
 import { SignOutButton } from "./components/auth/SignOutButton";
 import { useAuthState } from "./components/auth/authContext";
 import { StudentHomePage } from "./components/student/StudentHomePage";
+import { TalentSearchPage } from "./components/talent/TalentSearchPage";
 import { ROLE_LABELS } from "./lib/roles";
 
 /**
@@ -52,6 +53,8 @@ function AuthGate() {
       <main>
         {role === "aluno" ? (
           <StudentHomePage />
+        ) : role === "recrutador" || role === "gestor" || role === "empresa" ? (
+          <TalentSearchPage />
         ) : (
           <section className="mx-auto max-w-6xl rounded-lg border border-slate-200 bg-white p-6 shadow-level1">
             <h1 className="font-serif text-2xl font-bold text-primary">
