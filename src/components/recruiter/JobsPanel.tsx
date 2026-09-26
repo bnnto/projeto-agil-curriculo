@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { JobForm } from "./JobForm";
 import { CONTRACT_LABELS, formatSalaryRange } from "../../lib/job";
+import { renewalWindow } from "../../lib/jobExpiry";
 
 const STATUS_BADGE: Record<
   Doc<"jobs">["status"],
@@ -36,15 +37,14 @@ const NEXT_STATUS: Record<
 };
 
 /**
- * Painel do recrutador (issue [S3-1]): CRUD de vagas persistidas em
- * `jobs` (CA 1) com ciclo de vida aberta/fechada/encerrada. Validação
- * de faixa salarial e obrigatórios fica na regra pura compartilhada
- * com o servidor (CA 2); pré-requisitos obrigatórios/opcionais (CA 3)
- * alimentam o matching (R3/R8) nas próximas issues.
+ * Painel do recrutador (issues [S3-1]/[S3-2]): CRUD de vagas persistidas
+ * em `jobs` (CA 1 de S3-1) com ciclo de vida aberta/fechada/encerrada,
+ * prazo de expiração R4 (publicação, aviso e renovação de 30 dias).
  */
 export function JobsPanel() {
   const jobs = useQuery(api.jobs.myJobs, {});
   const setJobStatus = useMutation(api.jobs.setJobStatus);
+  const renewJob = useMutation(api.jobs.renewJob);
   const [mode, setMode] = useState<
     { kind: "list" } | { kind: "new" } | { kind: "edit"; job: Doc<"jobs"> }
   >({ kind: "list" });
@@ -62,6 +62,20 @@ export function JobsPanel() {
         err instanceof Error ? err.message : "Falha ao alterar o status.",
       );
     }
+  }
+
+  async function handleRenew(jobId: Doc<"jobs">["_id"]) {
+    setError(null);
+    try {
+      await renewJob({ jobId });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Falha ao renovar a vaga.");
+    }
+  }
+
+  function formatDay(timestamp: number | undefined): string {
+    if (timestamp === undefined) return "—";
+    return new Date(timestamp).toLocaleDateString("pt-BR");
   }
 
   if (mode.kind === "new") {
@@ -133,6 +147,36 @@ export function JobsPanel() {
               <p className="mt-2 line-clamp-2 text-sm text-slate-600">
                 {job.description}
               </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Publicada em {formatDay(job.publishedAt)} · expira em{" "}
+                {formatDay(job.expiresAt)}
+                {job.expiresAt !== undefined && job.status === "aberta"
+                  ? (() => {
+                      const window = renewalWindow(
+                        { status: job.status, expiresAt: job.expiresAt },
+                        Date.now(),
+                      );
+                      if (window.expired) {
+                        return (
+                          <span className="font-semibold text-danger">
+                            {" "}
+                            · vencida — será encerrada pelo cron diário
+                          </span>
+                        );
+                      }
+                      if (window.expiring) {
+                        return (
+                          <span className="font-semibold text-warning">
+                            {" "}
+                            · {window.daysLeft} dia(s) restante(s) — renove para
+                            reativar 30 dias
+                          </span>
+                        );
+                      }
+                      return ` · ${window.daysLeft} dia(s) restante(s)`;
+                    })()
+                  : null}
+              </p>
               <ul
                 className="mt-2 flex flex-wrap gap-2"
                 aria-label="Pré-requisitos"
@@ -153,6 +197,14 @@ export function JobsPanel() {
                 ))}
               </ul>
               <div className="mt-3 flex flex-wrap items-center gap-2">
+                {job.status !== "encerrada" ? (
+                  <Button
+                    variant="accent"
+                    onClick={() => void handleRenew(job._id)}
+                  >
+                    Renovar (30 dias)
+                  </Button>
+                ) : null}
                 <Button
                   variant="secondary"
                   onClick={() => setMode({ kind: "edit", job })}
