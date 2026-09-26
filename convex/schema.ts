@@ -163,6 +163,12 @@ export default defineSchema({
       v.literal("fechada"),
       v.literal("encerrada"),
     ),
+    /**
+     * [S3-2] R4 — expiração: `expiresAt = publishedAt + 30d` gravado na
+     * publicação; renovação reativa o prazo; cron diário encerra vencidas.
+     */
+    publishedAt: v.optional(v.number()),
+    expiresAt: v.optional(v.number()),
   })
     .index("by_recruiter", ["recruiterId"])
     .index("by_status", ["status"]),

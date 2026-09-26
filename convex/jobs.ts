@@ -1,4 +1,9 @@
-import { query, mutation, type QueryCtx } from "./_generated/server";
+import {
+  query,
+  mutation,
+  internalMutation,
+  type QueryCtx,
+} from "./_generated/server";
 import { v } from "convex/values";
 import type { Doc } from "./_generated/dataModel";
 import { CURRENT_TERM_VERSION } from "./consentTerms";
@@ -7,6 +12,11 @@ import {
   type JobInput,
   type JobPrerequisite,
 } from "../src/lib/job";
+import {
+  computeExpiresAt,
+  isJobExpired,
+  renewJob as renewJobDecision,
+} from "../src/lib/jobExpiry";
 
 /**
  * Vagas do recrutador (issue [S3-1]).
@@ -112,10 +122,14 @@ export const upsertJob = mutation({
       return { jobId: args.jobId, created: false as const };
     }
 
+    // [S3-2] CA 1 — prazo de expiração gravado na publicação (R4).
+    const now = Date.now();
     const jobId = await ctx.db.insert("jobs", {
       recruiterId: user._id,
       ...job,
       status: "aberta",
+      publishedAt: now,
+      expiresAt: computeExpiresAt(now),
     });
     return { jobId, created: true as const };
   },
@@ -148,7 +162,10 @@ export const getJob = query({
   },
 });
 
-/** Abre/fecha/encerra uma vaga própria (ciclo de vida do CA 1). */
+/**
+ * Abre/fecha/encerra uma vaga própria (ciclo de vida do CA 1).
+ * Reabrir (status "aberta") reativa o prazo de 30 dias (R4/CA 3).
+ */
 export const setJobStatus = mutation({
   args: {
     jobId: v.id("jobs"),
@@ -165,7 +182,83 @@ export const setJobStatus = mutation({
     if (job.recruiterId !== user._id) {
       throw new Error("Você só pode alterar as suas próprias vagas.");
     }
-    await ctx.db.patch(jobId, { status });
+    if (status === "aberta") {
+      // Reabertura — reinicia o prazo de expiração a partir de agora.
+      const now = Date.now();
+      await ctx.db.patch(jobId, {
+        status,
+        publishedAt: now,
+        expiresAt: computeExpiresAt(now),
+      });
+    } else {
+      await ctx.db.patch(jobId, { status });
+    }
     return { ok: true as const, status };
+  },
+});
+
+/**
+ * [S3-2] CA 3 — Renovação: reativa o prazo de 30 dias da vaga própria.
+ * Vaga fechada volta a ficar aberta; vencida é recusada (o cron a
+ * encerra — evita renovar vagas fora do ar); encerrada não é renovável.
+ */
+export const renewJob = mutation({
+  args: { jobId: v.id("jobs") },
+  handler: async (ctx, { jobId }) => {
+    const user = await requireRecruiter(ctx);
+    const job = await ctx.db.get(jobId);
+    if (job === null) throw new Error("Vaga não encontrada.");
+    if (job.recruiterId !== user._id) {
+      throw new Error("Você só pode renovar as suas próprias vagas.");
+    }
+    const now = Date.now();
+    const decision = renewJobDecision(
+      {
+        status: job.status,
+        publishedAt: job.publishedAt ?? now,
+        expiresAt: job.expiresAt ?? now,
+      },
+      now,
+    );
+    if (!decision.ok) {
+      throw new Error(
+        decision.reason === "expirada"
+          ? "Vaga expirada — o encerramento automático acontece no próximo ciclo."
+          : "Vaga encerrada não pode ser renovada.",
+      );
+    }
+    await ctx.db.patch(jobId, {
+      status: "aberta",
+      publishedAt: now,
+      expiresAt: decision.expiresAt,
+    });
+    return { ok: true as const, expiresAt: decision.expiresAt };
+  },
+});
+
+/**
+ * [S3-2] CA 2 — Cron diário (convex/crons.ts): encerra automaticamente
+ * todas as vagas abertas vencidas (R4 — "Encerrada" se não renovada).
+ * Varredura ancorada no índice by_status (somente abertas).
+ */
+export const closeExpiredJobs = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const openJobs = await ctx.db
+      .query("jobs")
+      .withIndex("by_status", (q) => q.eq("status", "aberta"))
+      .collect();
+    let closed = 0;
+    for (const job of openJobs) {
+      if (
+        job.expiresAt !== undefined &&
+        isJobExpired({ status: job.status, expiresAt: job.expiresAt }, now)
+      ) {
+        await ctx.db.patch(job._id, { status: "encerrada" });
+        closed += 1;
+      }
+    }
+    return { closed, checkedAt: now };
   },
 });
