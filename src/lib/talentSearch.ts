@@ -10,6 +10,47 @@ import type { Availability, EnrollmentStatus } from "./studentProfile";
 /** Tamanho da página da busca paginada (CA 2). */
 export const TALENT_PAGE_SIZE = 10;
 
+/**
+ * [S2-4] Teto por varredura de índice no Banco de Talentos (proteção de
+ * leitura em base 10k+). O restante da paginação é feito em memória
+ * sobre as varreduras trincadas.
+ */
+export const TALENT_SCAN_BATCH = 200;
+
+/**
+ * [S2-4] Plano de varredura do Banco de Talentos: escolha do índice de
+ * entrada por filtro (sempre indexado, nunca full-scan de 10k+ currículos).
+ * O servidor executa este plano; o teste de fitness garante que o schema
+ * declara os índices escolhidos.
+ */
+export const TALENT_SCAN_SCHEMA = {
+  /** R1+R2 já na seleção — entrada padrão da busca. */
+  by_visibility_status: ["visibility", "status"] as const,
+  /** Entrada quando o recrutador filtra disponibilidade. */
+  by_status_availability: ["status", "availability"] as const,
+} as const;
+
+export type TalentScanIndex = keyof typeof TALENT_SCAN_SCHEMA;
+
+/**
+ * Escolhe o índice de entrada a partir dos filtros (regra pura, testável).
+ * Disponibilidade → `by_status_availability`; caso contrário, a entrada
+ * padrão `by_visibility_status` (R1+R2 na varredura). Em ambos os casos
+ * `status` é componente do índice, garantindo a R1 no range varrido.
+ */
+export function chooseTalentScanPlan(availability: string | undefined): {
+  index: TalentScanIndex;
+  statuses: Array<"ativo" | "egresso">;
+} {
+  return {
+    index:
+      availability !== undefined && availability.length > 0
+        ? "by_status_availability"
+        : "by_visibility_status",
+    statuses: ["ativo", "egresso"],
+  };
+}
+
 const LEVEL_ORDER: Record<LanguageLevel, number> = {
   basico: 1,
   intermediario: 2,
@@ -84,6 +125,40 @@ export function canAppearInTalentBank(
   if (candidate.status === "inativo") return false;
   // R2 — o aluno opta por se expor, nunca o contrário.
   return candidate.visibility === "publico";
+}
+
+/**
+ * Projeta um documento de estudante (ex.: Doc<"students"> do Convex) para
+ * o candidato puro da busca — mantém src/lib livre de tipos do Convex.
+ */
+export function toTalentCandidate<
+  T extends {
+    _id: string;
+    fullName: string;
+    course: string;
+    status: "ativo" | "egresso" | "inativo";
+    graduationYear: number;
+    semester?: number;
+    location?: string;
+    availability: "estagio" | "integral" | "meio_periodo" | "freelancer";
+    skills?: string[];
+    languages?: Array<{ name: string; level: LanguageLevel }>;
+  },
+>(doc: T): TalentCandidate {
+  return {
+    id: doc._id,
+    fullName: doc.fullName,
+    course: doc.course,
+    status: doc.status,
+    // Varreduras partem de índices que já garantem R2 (visibilidade pública).
+    visibility: "publico",
+    graduationYear: doc.graduationYear,
+    semester: doc.semester ?? null,
+    location: doc.location ?? null,
+    availability: doc.availability,
+    skills: doc.skills ?? [],
+    languages: doc.languages ?? [],
+  };
 }
 
 function matchesTextFilters(
