@@ -140,3 +140,62 @@ describe("projeção segura para o cliente (S1-4, R6)", () => {
     expect(view).toBeNull();
   });
 });
+
+describe("S2-5 — reforço TDD de R1/R2 como funções puras", () => {
+  it("R1: egresso público participa da busca (vínculo válido)", () => {
+    expect(canRecruiterSeeProfile({ ...base, status: "egresso" }, JOB_ID)).toBe(
+      true,
+    );
+  });
+
+  it("R1 prevalece sobre R2 mesmo com candidatura ativa liberada", () => {
+    const inativo = {
+      ...base,
+      status: "inativo" as const,
+      visibility: "somente_candidaturas" as const,
+      contactReleasedTo: [JOB_ID],
+    };
+    expect(canRecruiterSeeProfile(inativo, JOB_ID)).toBe(false);
+    expect(canRecruiterSeeContact(inativo, JOB_ID)).toBe(false);
+  });
+
+  it("R2: somente_candidaturas sem candidatura ativa não aparece (nem egresso)", () => {
+    const egressoPrivado = {
+      ...base,
+      status: "egresso" as const,
+      visibility: "somente_candidaturas" as const,
+      contactReleasedTo: [],
+    };
+    expect(canRecruiterSeeProfile(egressoPrivado, JOB_ID)).toBe(false);
+    expect(canRecruiterSeeProfile(egressoPrivado, null)).toBe(false);
+  });
+
+  it("projeção: inativo vira null mesmo com contato autorizado", () => {
+    const view = recruiterProjection(
+      {
+        ...base,
+        status: "inativo" as const,
+        fullName: "Maria",
+        course: "CC",
+        email: "maria@unicap.br",
+      },
+      JOB_ID,
+    );
+    expect(view).toBeNull();
+  });
+
+  it("projeção: egresso público com contato autorizado expõe e-mail", () => {
+    const view = recruiterProjection(
+      {
+        ...base,
+        status: "egresso" as const,
+        fullName: "Maria",
+        course: "CC",
+        email: "maria@unicap.br",
+      },
+      JOB_ID,
+    );
+    expect(view).not.toBeNull();
+    expect(view?.email).toBe("maria@unicap.br");
+  });
+});
