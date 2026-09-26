@@ -2,6 +2,7 @@ import { Card } from "../ui/card";
 import { StudentProfileForm } from "./StudentProfileForm";
 import { PrivacySettings } from "./PrivacySettings";
 import { ResumeForm } from "./ResumeForm";
+import { ResumeDownload } from "./ResumeDownload";
 
 /**
  * Home do aluno (issue [S1-3]): cadastro/edição do perfil em Card
@@ -33,6 +34,12 @@ export function StudentHomePage() {
       <div className="mt-6">
         <Card title="Currículo Vitae" accent="secondary">
           <ResumeForm />
+          <div
+            className="my-4 border-t border-slate-200"
+            role="separator"
+            aria-hidden="true"
+          />
+          <ResumeDownload />
         </Card>
       </div>
     </div>
