@@ -12,7 +12,17 @@ import {
   type LanguageEntry,
 } from "../src/lib/skills";
 import { validateResumeData } from "../src/lib/resume";
-import { recruiterProjection } from "../src/lib/visibility";
+import {
+  canAppearInTalentBank,
+  filterTalentCandidates,
+  formatTalentSummary,
+  type TalentCandidate,
+  type TalentFilters,
+} from "../src/lib/talentSearch";
+import {
+  canRecruiterSeeContact,
+  recruiterProjection,
+} from "../src/lib/visibility";
 
 /**
  * Perfil do aluno/egresso (issues [S1-3]/[S1-4], R1/R2/R6).
@@ -395,6 +405,154 @@ export const publicProfile = query({
         view.email !== undefined ? (student.portfolioUrl ?? null) : null,
       availability: student.availability,
     };
+  },
+});
+
+/**
+ * [S2-3] Banco de Talentos — busca com filtros avançados e resultados
+ * paginados (CAs 1 e 2), para recrutadores/gestores/empresa autenticados
+ * (R7). R1 (apenas ativo/egresso) e R2 (apenas `visibility: publico`)
+ * são aplicados no servidor via índice `by_visibility_status` e
+ * re-verificados por `canAppearInTalentBank` antes de expor cada card.
+ * Contato (R6) só aparece com autorização geral do aluno.
+ */
+export const searchTalent = query({
+  args: {
+    search: v.optional(v.string()),
+    course: v.optional(v.string()),
+    status: v.optional(v.union(v.literal("ativo"), v.literal("egresso"))),
+    availability: v.optional(
+      v.union(
+        v.literal("estagio"),
+        v.literal("integral"),
+        v.literal("meio_periodo"),
+        v.literal("freelancer"),
+      ),
+    ),
+    location: v.optional(v.string()),
+    skill: v.optional(v.string()),
+    language: v.optional(v.string()),
+    languageLevel: v.optional(
+      v.union(
+        v.literal("basico"),
+        v.literal("intermediario"),
+        v.literal("avancado"),
+        v.literal("fluente"),
+        v.literal("nativo"),
+      ),
+    ),
+    page: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) throw new Error("Não autenticado.");
+    const email = identity.email ?? identity.tokenIdentifier;
+    const consent = (await ctx.runQuery(
+      internal.consents.requireActiveConsent,
+      { email },
+    )) as { ok: boolean; role?: string | null };
+    if (!consent.ok) {
+      throw new Error("Aceite o Termo de Consentimento LGPD vigente.");
+    }
+    if (
+      consent.role !== "recrutador" &&
+      consent.role !== "gestor" &&
+      consent.role !== "empresa"
+    ) {
+      throw new Error(
+        "Apenas recrutadores e gestores acessam o Banco de Talentos.",
+      );
+    }
+
+    const filters: TalentFilters = {
+      query: args.search?.trim() || undefined,
+      course: args.course?.trim() || undefined,
+      status: args.status,
+      availability: args.availability,
+      location: args.location?.trim() || undefined,
+      skill: args.skill?.trim() || undefined,
+      language: args.language?.trim() || undefined,
+      languageLevel: args.languageLevel,
+      page: args.page,
+    };
+
+    // R1+R2 já no índice: varre apenas perfis públicos ativos e egressos.
+    const rows: TalentCandidate[] = [];
+    for (const status of ["ativo", "egresso"] as const) {
+      const batch = await ctx.db
+        .query("students")
+        .withIndex("by_visibility_status", (q) =>
+          q.eq("visibility", "publico").eq("status", status),
+        )
+        .collect();
+      for (const doc of batch) {
+        rows.push({
+          id: doc._id,
+          fullName: doc.fullName,
+          course: doc.course,
+          status: doc.status,
+          visibility: "publico",
+          graduationYear: doc.graduationYear,
+          semester: doc.semester ?? null,
+          location: doc.location ?? null,
+          availability: doc.availability,
+          skills: doc.skills ?? [],
+          languages: doc.languages ?? [],
+        });
+      }
+    }
+
+    // Filtros combináveis + paginação (regra pura compartilhada com a UI).
+    const result = filterTalentCandidates(rows, filters);
+
+    const items = [];
+    for (const row of result.items) {
+      // Re-checagem por card: o perfil pode ter mudado entre índice e leitura.
+      const student = await ctx.db.get(row.id as Id<"students">);
+      if (student === null) continue;
+      if (
+        !canAppearInTalentBank({
+          status: student.status,
+          visibility: student.visibility ?? "somente_candidaturas",
+        })
+      ) {
+        continue;
+      }
+      // R6 — contato e links profissionais apenas com autorização geral.
+      const contactAllowed = canRecruiterSeeContact(
+        {
+          status: student.status,
+          visibility: student.visibility ?? "somente_candidaturas",
+          showContactToRecruiters: student.showContactToRecruiters ?? false,
+          contactReleasedTo: [],
+        },
+        null,
+      );
+      items.push({
+        studentId: student._id,
+        fullName: student.fullName,
+        course: student.course,
+        status: student.status,
+        graduationYear: student.graduationYear,
+        semester: student.semester ?? null,
+        location: student.location ?? null,
+        availability: student.availability,
+        summary: formatTalentSummary({
+          status: student.status,
+          course: student.course,
+          graduationYear: student.graduationYear,
+          semester: student.semester ?? null,
+        }),
+        skills: student.skills ?? [],
+        languages: student.languages ?? [],
+        headline: student.resumeData?.headline ?? null,
+        contactAllowed,
+        linkedinUrl: contactAllowed ? (student.linkedinUrl ?? null) : null,
+        portfolioUrl: contactAllowed ? (student.portfolioUrl ?? null) : null,
+      });
+    }
+
+    return { ...result, items };
   },
 });
 
