@@ -134,4 +134,36 @@ export default defineSchema({
      * por disponibilidade. Evita varrer todos os públicos ativos+egressos.
      */
     .index("by_status_availability", ["status", "availability"]),
+
+  /**
+   * Vagas publicadas por recrutadores (issue [S3-1]).
+   * Pré-requisitos com flag `required` — base para R3 (matching) e R8
+   * (explicação dos critérios nas próximas issues). `status` controla o
+   * ciclo de vida: aberta recebe candidaturas; fechada/encerrada não.
+   * `recruiterId` aponta para `users`, nunca para o aluno (R2/R6 intactos).
+   */
+  jobs: defineTable({
+    recruiterId: v.id("users"),
+    title: v.string(),
+    description: v.string(),
+    prerequisites: v.array(
+      v.object({ item: v.string(), required: v.boolean() }),
+    ),
+    contractType: v.union(
+      v.literal("estagio"),
+      v.literal("clt"),
+      v.literal("pj"),
+      v.literal("temporario"),
+    ),
+    salaryMin: v.optional(v.number()),
+    salaryMax: v.optional(v.number()),
+    location: v.optional(v.string()),
+    status: v.union(
+      v.literal("aberta"),
+      v.literal("fechada"),
+      v.literal("encerrada"),
+    ),
+  })
+    .index("by_recruiter", ["recruiterId"])
+    .index("by_status", ["status"]),
 });
