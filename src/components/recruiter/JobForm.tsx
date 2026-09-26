@@ -4,6 +4,8 @@ import { api } from "../../../convex/_generated/api";
 import type { Doc } from "../../../convex/_generated/dataModel";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { LANGUAGE_LEVELS, type LanguageLevel } from "../../lib/skills";
+import { AVAILABILITY } from "../../lib/studentProfile";
 import {
   CONTRACT_TYPES,
   CONTRACT_LABELS,
@@ -14,6 +16,21 @@ import {
 } from "../../lib/job";
 
 const DESCRIPTION_MAX = 4000;
+
+const LEVEL_LABELS: Record<LanguageLevel, string> = {
+  basico: "Básico",
+  intermediario: "Intermediário",
+  avancado: "Avançado",
+  fluente: "Fluente",
+  nativo: "Nativo",
+};
+
+const AVAILABILITY_LABELS: Record<(typeof AVAILABILITY)[number], string> = {
+  estagio: "Estágio",
+  integral: "Período integral",
+  meio_periodo: "Meio período",
+  freelancer: "Freelancer",
+};
 
 type JobFormProps = {
   /** Vaga em edição (null = nova vaga). */
@@ -39,6 +56,11 @@ export function JobForm({ initial = null, onDone }: JobFormProps) {
   const [salaryMin, setSalaryMin] = useState("");
   const [salaryMax, setSalaryMax] = useState("");
   const [location, setLocation] = useState("");
+  const [languageName, setLanguageName] = useState("");
+  const [languageLevel, setLanguageLevel] = useState<LanguageLevel>("basico");
+  const [jobAvailability, setJobAvailability] = useState<
+    (typeof AVAILABILITY)[number] | ""
+  >("");
   const [errors, setErrors] = useState<string[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -62,6 +84,9 @@ export function JobForm({ initial = null, onDone }: JobFormProps) {
         initial.salaryMax !== undefined ? String(initial.salaryMax) : "",
       );
       setLocation(initial.location ?? "");
+      setLanguageName(initial.requiredLanguage?.name ?? "");
+      setLanguageLevel(initial.requiredLanguage?.level ?? "basico");
+      setJobAvailability(initial.availability ?? "");
       setLoaded(true);
     }
   }, [initial, loaded]);
@@ -94,6 +119,11 @@ export function JobForm({ initial = null, onDone }: JobFormProps) {
       salaryMin: parseSalary(salaryMin),
       salaryMax: parseSalary(salaryMax),
       location,
+      requiredLanguage:
+        languageName.trim().length > 0
+          ? { name: languageName, level: languageLevel }
+          : undefined,
+      availability: jobAvailability === "" ? undefined : jobAvailability,
     });
     if (!validation.ok) {
       setErrors(validation.errors);
@@ -304,6 +334,54 @@ export function JobForm({ initial = null, onDone }: JobFormProps) {
         onChange={(e) => setLocation(e.target.value)}
         hint="Ex.: Recife/PE ou Remoto"
       />
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-semibold text-slate-700">
+          Matching (opcional) —{" "}
+          <span className="font-normal text-xs text-slate-500">
+            usados no cálculo do % de compatibilidade dos candidatos
+          </span>
+        </legend>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            type="text"
+            value={languageName}
+            onChange={(e) => setLanguageName(e.target.value)}
+            placeholder="Idioma exigido (ex.: Inglês)"
+            aria-label="Idioma exigido"
+            className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+          />
+          <select
+            value={languageLevel}
+            onChange={(e) => setLanguageLevel(e.target.value as LanguageLevel)}
+            aria-label="Nível mínimo do idioma"
+            className="rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+          >
+            {LANGUAGE_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {LEVEL_LABELS[level]}
+              </option>
+            ))}
+          </select>
+          <select
+            value={jobAvailability}
+            onChange={(e) =>
+              setJobAvailability(
+                e.target.value as (typeof AVAILABILITY)[number] | "",
+              )
+            }
+            aria-label="Disponibilidade desejada"
+            className="rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
+          >
+            <option value="">Disponibilidade: qualquer</option>
+            {AVAILABILITY.map((value) => (
+              <option key={value} value={value}>
+                {AVAILABILITY_LABELS[value]}
+              </option>
+            ))}
+          </select>
+        </div>
+      </fieldset>
 
       <div className="flex items-center gap-3">
         <Button type="submit" variant="primary" disabled={pending}>

@@ -102,6 +102,27 @@ export const upsertJob = mutation({
     salaryMin: v.optional(v.number()),
     salaryMax: v.optional(v.number()),
     location: v.optional(v.string()),
+    /** [S3-4] Insumos do matching (R8): idioma mínimo e disponibilidade. */
+    requiredLanguage: v.optional(
+      v.object({
+        name: v.string(),
+        level: v.union(
+          v.literal("basico"),
+          v.literal("intermediario"),
+          v.literal("avancado"),
+          v.literal("fluente"),
+          v.literal("nativo"),
+        ),
+      }),
+    ),
+    availability: v.optional(
+      v.union(
+        v.literal("estagio"),
+        v.literal("integral"),
+        v.literal("meio_periodo"),
+        v.literal("freelancer"),
+      ),
+    ),
   },
   handler: async (ctx, args) => {
     const user = await requireRecruiter(ctx);
